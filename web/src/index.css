@@ -1,0 +1,32 @@
+#mynetwork {
+    width: 100vw;
+    height: calc(100vh - 100px);
+    min-height: 300px;
+    border: none;
+    outline: none;
+}
+#mynetwork * {
+    border: none;
+    outline: none;
+}
+
+#legend1, #legend2, #legend3 {
+    border-width: 1px;
+    border-style: solid;
+}
+
+#legend1 {
+    border-color: #5E3023;
+    background: #F3E9DC;
+}
+
+#legend2 {
+    border-color: #F3E9DC;
+    background: #5E3023;
+    color: #F3E9DC;
+}
+
+#legend3 {
+    border-color: #5E3023;
+    background: #f3cd88;
+}

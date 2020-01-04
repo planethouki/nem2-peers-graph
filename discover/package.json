@@ -1,0 +1,19 @@
+{
+  "name": "nem2-peers-graph-discover",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "start": "yarn fetch && yarn generate",
+    "fetch": "node fetchPeers.js",
+    "generate": "node generateVisData.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "async": "^3.1.0",
+    "catapult-sdk": "link:../catapult-sdk"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
