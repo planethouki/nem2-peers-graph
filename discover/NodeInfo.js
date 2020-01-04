@@ -5,8 +5,10 @@ module.exports = function(config, node, callback) {
     console.log(`connecting to ${node.host}:${node.port}`);
     const serverSocket = net.createConnection(node.port, node.host);
     const apiNodePublicKey = catapult.utils.convert.hexToUint8(node.publicKey);
-
     const clientKeyPair = catapult.crypto.createKeyPairFromPrivateKeyString(config.clientPrivateKey);
+
+    let returnValue;
+    let returnError;
 
     serverSocket
         .on('error', err => {
@@ -14,6 +16,7 @@ module.exports = function(config, node, callback) {
         })
         .on('close', () => {
             console.log('connection close');
+            callback(returnError, returnValue);
         });
 
     catapult.auth.createAuthPromise(serverSocket, clientKeyPair, apiNodePublicKey, console.log)
@@ -57,10 +60,10 @@ module.exports = function(config, node, callback) {
             const friendlyNameSize = parser.uint8();
             nodeInfo.host = (0 === hostSize ? Buffer.alloc(0) : parser.buffer(hostSize)).toString();
             nodeInfo.friendlyName = (0 === friendlyNameSize ? Buffer.alloc(0) : parser.buffer(friendlyNameSize)).toString();
-            callback(null, nodeInfo);
+            returnValue = nodeInfo;
         })
         .catch((e) => {
-            callback(e);
+            returnError = e;
         });
 
 };
