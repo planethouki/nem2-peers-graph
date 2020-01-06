@@ -8,13 +8,9 @@ const config = {
     clientPrivateKey: 'E8532B288B1FBBCD846A99A64D2F42748A5F26C7891BB0FA2D711DAACBAB3718'
 };
 const startNode = {
-    "version": 0,
     "publicKey": "945FE33CEBE8EA7B3F7530A57649E4575F5DCE8741B94949BB105E2A1996A349",
-    "roles": 3,
     "port": 7900,
-    "networkIdentifier": 152,
-    "host": "test-api.48gh23s.xyz",
-    "friendlyName": "test-api.48gh23s.xyz"
+    "host": "test-api.48gh23s.xyz"
 };
 
 
@@ -24,7 +20,7 @@ function recursion(node, depth, callback) {
     if (peersInfo[node.publicKey]) {
         return callback();
     }
-    if (depth > 3) {
+    if (depth > 1) {
         return callback();
     }
     nodePeers(config, node, (err, peers) => {
@@ -43,7 +39,13 @@ function recursion(node, depth, callback) {
     })
 }
 
-recursion(startNode, 0, () => {
-    fs.writeFileSync('./output/peers.json', JSON.stringify(peersInfo, null, '  '));
-    console.log("-------------------- finish");
-});
+async.waterfall([
+    async.apply(nodeInfo, config, startNode),
+    (node, callback) => {
+        recursion(node, 0, callback);
+    },
+    (callback) => {
+        fs.writeFile('./output/peers.json', JSON.stringify(peersInfo, null, '  '), callback);
+    },
+]);
+
