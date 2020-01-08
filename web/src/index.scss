@@ -1,3 +1,14 @@
+$primary: #b15d3d;
+$secondary: #f3cd88;
+$success: #804421;
+$info: #e2ff3f;
+$warning: #FFC107;
+$danger: #ff0000;
+$light: #F3E9DC;
+$dark: #5E3023;
+
+@import '~bootstrap/scss/bootstrap';
+
 #mynetwork {
     width: 100vw;
     height: calc(100vh - 100px);
