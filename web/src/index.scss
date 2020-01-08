@@ -1,20 +1,19 @@
-$primary: #b15d3d;
-$secondary: #f3cd88;
-$success: #804421;
-$info: #e2ff3f;
-$warning: #FFC107;
-$danger: #ff0000;
+$primary: #c8a05c;
+$secondary: #999999;
+$success: #71ab54;
+$info: #2e3a3e;
+$warning: #ef9a1c;
+$danger: #f44336;
 $light: #F3E9DC;
 $dark: #5E3023;
 
 @import '~bootstrap/scss/bootstrap';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
 
 #mynetwork {
-    width: 100vw;
-    height: calc(100vh - 100px);
+    width: 100%;
+    height: calc(100vh - 56px);
     min-height: 300px;
-    border: none;
-    outline: none;
 }
 #mynetwork * {
     border: none;
@@ -22,6 +21,8 @@ $dark: #5E3023;
 }
 
 #legend1, #legend2, #legend3 {
+    @extend .d-block, .rounded, .my-1;
+    min-width: 8rem;
     border-width: 1px;
     border-style: solid;
 }

@@ -6,20 +6,27 @@
     <title>nem2 Peers Graph</title>
 </head>
 <body>
-<nav class="navbar navbar-expand navbar-light bg-light">
+<nav class="navbar navbar-expand bg-primary text-white justify-content-between">
     <span class="navbar-brand">nem2 Peers Graph</span>
+    <span>
+        <a class="text-white" href="https://github.com/planethouki/nem2-peers-graph" target="_blank" rel="noreferrer">
+            <i class="fab fa-github-square fa-lg"></i>
+        </a>
+    </span>
 </nav>
-<div id="mynetwork"></div>
-<div class="p-1 text-center">
-    <span id="legend1" class="px-2 d-inline-block rounded">
-        Peer Node
-    </span>
-    <span id="legend2" class="px-2 d-inline-block rounded">
-        Api Node
-    </span>
-    <span id="legend3" class="px-2 d-inline-block rounded">
-        Peer&Api Node
-    </span>
+<div class="position-relative">
+    <div id="mynetwork"></div>
+    <div class="text-center position-absolute" style="top:50%;right:0;transform:translateY(-50%);">
+        <span id="legend1">
+            Peer Node
+        </span>
+        <span id="legend2">
+            Api Node
+        </span>
+        <span id="legend3">
+            Peer&Api Node
+        </span>
+    </div>
 </div>
 </body>
 </html>
