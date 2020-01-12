@@ -20,9 +20,26 @@ $dark: #5E3023;
     outline: none;
 }
 
+.legend-wrap {
+    @extend .text-center, .position-absolute;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    top: 100%;
+    transform: translate(0, -100%);
+}
+@include media-breakpoint-up(sm) {
+    .legend-wrap {
+        flex-direction: column;
+        top: 50%;
+        left: 100%;
+        transform: translate(-100%, -50%);
+    }
+}
 #legend1, #legend2, #legend3 {
-    @extend .d-block, .rounded, .my-1;
-    min-width: 8rem;
+    @extend .rounded, .m-1;
+    display: inline-block;
+    width: 8rem;
     border-width: 1px;
     border-style: solid;
 }
