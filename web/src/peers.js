@@ -1,7 +1,7 @@
 /* global env */
 import 'bootstrap';
 import './common.js';
-import './index.scss';
+import './style.scss';
 const Tabulator = require('tabulator-tables');
 
 env.getPeersData()

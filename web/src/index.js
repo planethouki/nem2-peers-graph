@@ -1,7 +1,7 @@
 /* global env */
 import 'bootstrap';
 import './common.js';
-import './index.scss';
+import './style.scss';
 const vis = require('vis-network');
 const container = document.getElementById('mynetwork');
 
