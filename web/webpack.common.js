@@ -26,14 +26,9 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(ttf|eot|woff|woff2|svg)$/,
+                test: /\.png$/,
                 use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: './webfonts',
-                        publicPath: '../webfonts',
-                    }
+                    loader: 'file-loader'
                 }]
             },
         ]

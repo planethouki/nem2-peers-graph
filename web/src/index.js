@@ -1,6 +1,6 @@
 /* global env */
 import 'bootstrap';
-import '@fortawesome/fontawesome-free/js/all';
+import './common.js';
 import './index.scss';
 const vis = require('vis-network');
 const container = document.getElementById('mynetwork');
