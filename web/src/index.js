@@ -2,7 +2,6 @@
 import 'bootstrap';
 import '@fortawesome/fontawesome-free/js/all';
 import './index.scss';
-
 const vis = require('vis-network');
 const container = document.getElementById('mynetwork');
 
@@ -81,4 +80,3 @@ env.getGraphData()
         };
         const network = new vis.Network(container, data, options);
     });
-

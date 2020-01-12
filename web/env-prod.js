@@ -7,5 +7,9 @@ module.exports = {
             .then(([nodes, edges]) => {
                 return Promise.all([nodes.json(), edges.json()])
             })
+    },
+    getPeersData() {
+        return fetch('https://tools48gh23s.blob.core.windows.net/data/peers-graph/peers.json')
+            .then((peers) => peers.json())
     }
 }
