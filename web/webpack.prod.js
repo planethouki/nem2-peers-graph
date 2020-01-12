@@ -20,7 +20,7 @@ module.exports = merge(common, {
     },
     output: {
         filename: '[name].min.js',
-        chunkFilename: '[hash].min.js',
+        chunkFilename: '[name].[hash].min.js',
         path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
