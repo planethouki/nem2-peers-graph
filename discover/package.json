@@ -6,12 +6,14 @@
   "scripts": {
     "start": "yarn fetch && yarn generate",
     "fetch": "node fetchPeers.js",
-    "generate": "node generateVisData.js",
+    "generate:vis": "node generateVisData.js",
+    "generate:geo": "node fetchGeoData.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "async": "^3.1.0",
-    "catapult-sdk": "link:../catapult-sdk"
+    "catapult-sdk": "link:../catapult-sdk",
+    "request": "^2.88.0"
   },
   "keywords": [],
   "author": "",

@@ -6,7 +6,8 @@ const webpack = require('webpack');
 module.exports = {
     entry: {
         index: './src/index.js',
-        peers: './src/peers.js'
+        peers: './src/peers.js',
+        geos: './src/geos.js'
     },
     module: {
         rules: [
@@ -35,15 +36,12 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(),
-        new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: "./src/index.html",
-            excludeChunks: ['peers']
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'peers.html',
-            template: "./src/peers.html",
-            excludeChunks: ['index']
+        ...['index', 'peers', 'geos'].map((name, index, original) => {
+            return new HtmlWebpackPlugin({
+                filename: `${name}.html`,
+                template: `./src/${name}.html`,
+                excludeChunks: original.filter((n) => n !== name)
+            })
         }),
         new webpack.ProvidePlugin({
             $: 'jquery',
