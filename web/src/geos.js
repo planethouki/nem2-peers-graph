@@ -6,7 +6,7 @@ import './style.scss';
 function color(value, max) {
     const hue = Math.floor((value / max) * 120) + 120;
     console.log(hue);
-    return `hsl(${hue},100%,50%)`;
+    return `hsl(${hue},50%,70%)`;
 }
 
 env.getGeoData()
