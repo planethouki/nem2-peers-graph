@@ -63,13 +63,17 @@ env.getGeoData()
             }
         });
 
-        const tableData = Object.keys(countryCodeToData).map((countryCode) => {
-            const geo = countryCodeToData[countryCode]
-            return {
-                id: countryCode,
-                ...geo
-            }
-        });
+        const tableData = Object.keys(countryCodeToData)
+            .map((countryCode) => {
+                const geo = countryCodeToData[countryCode]
+                return {
+                    id: countryCode,
+                    ...geo
+                }
+            })
+            .sort((a, b) => {
+                return b.count - a.count
+            });
         const columns = [
             { title: 'Country', field: 'country' },
             { title: 'Count', field: 'count'},
@@ -83,10 +87,12 @@ env.getGeoData()
                     color: [color(0, maxCount), color(maxCount / 2, maxCount) ,color(maxCount, maxCount)],
                     legendColor: "#000000",
                     legendAlign: "center",
-                }
+                },
+                widthGrow: 5
             }
         ];
         const table = new Tabulator("#geos-table", {
+            layout: "fitColumns",
             data: tableData,
             columns,
         });
