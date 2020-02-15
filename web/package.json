@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.4.1",
+    "ejs-loader": "^0.3.5",
     "jquery": "^3.4.1",
     "popper.js": "^1.16.0",
     "tabulator-tables": "^4.5.3",
@@ -21,7 +22,10 @@
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.4.1",
+    "ejs": "^3.0.1",
+    "ejs-html-loader": "^4.0.1",
     "file-loader": "^5.0.2",
+    "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^0.9.0",

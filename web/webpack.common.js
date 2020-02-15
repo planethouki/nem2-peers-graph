@@ -32,6 +32,13 @@ module.exports = {
                     loader: 'file-loader'
                 }]
             },
+            {
+                test: /\.ejs$/,
+                use: [
+                    'html-loader',
+                    'ejs-html-loader'
+                ],
+            },
         ]
     },
     plugins: [
@@ -39,7 +46,7 @@ module.exports = {
         ...['index', 'peers', 'geos'].map((name, index, original) => {
             return new HtmlWebpackPlugin({
                 filename: `${name}.html`,
-                template: `./src/${name}.html`,
+                template: `./src/${name}.ejs`,
                 excludeChunks: original.filter((n) => n !== name)
             })
         }),
