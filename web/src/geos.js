@@ -75,8 +75,8 @@ env.getGeoData()
                 return b.count - a.count
             });
         const columns = [
-            { title: 'Country', field: 'country' },
-            { title: 'Count', field: 'count'},
+            { title: 'Country', field: 'country', minWidth: 100 },
+            { title: 'Count', field: 'count', minWidth: 70 },
             {
                 title:"Count",
                 field:"count",
