@@ -17,6 +17,7 @@ env.getPeersData()
                 networkIdentifier: peer.networkIdentifier,
                 host: peer.host,
                 friendlyName: peer.friendlyName,
+                peersCount: peer.peers.length
             }
         });
         const columns = [
@@ -26,6 +27,7 @@ env.getPeersData()
             { title: 'Ver', field: 'version' },
             { title: 'Roles', field: 'roles' },
             { title: 'NW', field: 'networkIdentifier' },
+            { title: 'Peers', field: 'peersCount' },
             { title: 'Public Key', field: 'publicKey' }
         ];
         const table = new Tabulator("#nodes-table", {
