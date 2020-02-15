@@ -76,9 +76,9 @@ env.getGeoData()
             });
         const columns = [
             { title: 'Country', field: 'country', minWidth: 100 },
-            { title: 'Count', field: 'count', minWidth: 70 },
+            { title: 'Count', field: 'count', minWidth: 70, bottomCalc: 'sum' },
             {
-                title:"Count",
+                title:"Bar",
                 field:"count",
                 formatter:"progress",
                 formatterParams:{
