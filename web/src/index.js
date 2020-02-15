@@ -1,4 +1,4 @@
-/* global env */
+/* global env, $ */
 import 'bootstrap';
 import './common.js';
 import './style.scss';
@@ -74,6 +74,7 @@ const options = {
 
 env.getGraphData()
     .then(([nodes, edges]) => {
+        $("#loading").remove();
         const data = {
             nodes: new vis.DataSet(nodes),
             edges: new vis.DataSet(edges)
