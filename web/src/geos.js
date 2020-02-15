@@ -2,6 +2,7 @@
 import 'bootstrap';
 import './common.js';
 import './style.scss';
+const Tabulator = require('tabulator-tables');
 
 function color(value, max) {
     const hue = Math.floor((value / max) * 120) + 120;
@@ -60,5 +61,33 @@ env.getGeoData()
                 rollOverColor : "#9EC2F7",
                 rollOverOutlineColor : "#000000"
             }
+        });
+
+        const tableData = Object.keys(countryCodeToData).map((countryCode) => {
+            const geo = countryCodeToData[countryCode]
+            return {
+                id: countryCode,
+                ...geo
+            }
+        });
+        const columns = [
+            { title: 'Country', field: 'country' },
+            { title: 'Count', field: 'count'},
+            {
+                title:"Count",
+                field:"count",
+                formatter:"progress",
+                formatterParams:{
+                    min: 0,
+                    max: maxCount,
+                    color: [color(0, maxCount), color(maxCount / 2, maxCount) ,color(maxCount, maxCount)],
+                    legendColor: "#000000",
+                    legendAlign: "center",
+                }
+            }
+        ];
+        const table = new Tabulator("#geos-table", {
+            data: tableData,
+            columns,
         });
     });
