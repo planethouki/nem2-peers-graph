@@ -7,7 +7,7 @@ const Tabulator = require('tabulator-tables');
 env.getPeersData()
     .then((peers) => {
         const tableData = Object.keys(peers).map((publicKey) => {
-            const peer = peers[publicKey]
+            const peer = peers[publicKey];
             return {
                 id: publicKey,
                 version: peer.version,
