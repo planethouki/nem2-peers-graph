@@ -1,5 +1,7 @@
 # nem2-peers-graph
 
+![image](https://user-images.githubusercontent.com/26595148/74582542-cabfa200-5000-11ea-956b-5d70cb567b41.png)
+
 ## live demo
 
 https://tools48gh23s.z31.web.core.windows.net/peers-graph/
