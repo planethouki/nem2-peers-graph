@@ -11,7 +11,6 @@ function color(value, max) {
 
 env.getGeoData()
     .then((data) => {
-        console.log(data)
         let maxCount = 0;
         const countryCodeToData = {};
         data.forEach((geo) => {
@@ -28,8 +27,6 @@ env.getGeoData()
                 }
             }
         });
-        console.log(countryCodeToData)
-
 
         const map = AmCharts.makeChart("mapdiv",{
             type: "map",
