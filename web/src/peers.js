@@ -21,16 +21,21 @@ env.getPeersData()
         });
         const columns = [
             { title: 'Name', field: 'friendlyName' },
-            { title: 'Host', field: 'host'},
+            { title: 'Host', field: 'host' },
             { title: 'Port', field: 'port' },
             { title: 'Ver', field: 'version' },
             { title: 'Roles', field: 'roles' },
-            { title: 'NW', field: 'networkIdentifier'},
+            { title: 'NW', field: 'networkIdentifier' },
             { title: 'Public Key', field: 'publicKey' }
-        ]
+        ];
         const table = new Tabulator("#nodes-table", {
             data: tableData,
             columns,
+            layout: "fitDataStretch",
         });
 
+        $("#all-node-num").text(tableData.length);
+        $("#dual-node-num").text(tableData.filter(x => x.roles === 3).length);
+        $("#peer-node-num").text(tableData.filter(x => x.roles === 1).length);
+        $("#api-node-num").text(tableData.filter(x => x.roles === 2).length);
     });
