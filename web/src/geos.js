@@ -6,7 +6,6 @@ const Tabulator = require('tabulator-tables');
 
 function color(value, max) {
     const hue = Math.floor((value / max) * 120) + 120;
-    console.log(hue);
     return `hsl(${hue},50%,70%)`;
 }
 
@@ -76,7 +75,7 @@ env.getGeoData()
             });
         const columns = [
             { title: 'Country', field: 'country', minWidth: 100 },
-            { title: 'Count', field: 'count', minWidth: 70, bottomCalc: 'sum' },
+            { title: 'Count', field: 'count', minWidth: 70 },
             {
                 title:"Bar",
                 field:"count",
