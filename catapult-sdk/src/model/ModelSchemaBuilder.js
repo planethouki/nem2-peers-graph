@@ -62,6 +62,11 @@ class ModelSchemaBuilder {
 				meta: { type: ModelType.object, schemaName: 'blockHeaderMetadata' },
 				block: { type: ModelType.object, schemaName: 'blockHeader' }
 			},
+			blockHeaderWithMetadataAndId: {
+				id: ModelType.objectId,
+				meta: { type: ModelType.object, schemaName: 'blockHeaderMetadata' },
+				block: { type: ModelType.object, schemaName: 'blockHeader' }
+			},
 			merkleProofInfo: {
 				merklePath: { type: ModelType.array, schemaName: 'merkleProofInfoPathNode' }
 			},
@@ -149,10 +154,13 @@ class ModelSchemaBuilder {
 				scoreLow: ModelType.uint64,
 				scoreHigh: ModelType.uint64
 			},
+			nodeHealth: {
+			},
 			nodeInfo: {
 				friendlyName: ModelType.string,
 				host: ModelType.string,
-				publicKey: ModelType.binary
+				publicKey: ModelType.binary,
+				networkGenerationHash: ModelType.binary
 			},
 			communicationTimestamps: {
 				receiveTimestamp: ModelType.uint64,
@@ -167,7 +175,7 @@ class ModelSchemaBuilder {
 				tree: { type: ModelType.array, schemaName: ModelType.binary }
 			},
 			storageInfo: {
-			},
+			}
 
 			// endregion
 		};

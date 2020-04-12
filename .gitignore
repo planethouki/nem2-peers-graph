@@ -2,3 +2,5 @@
 .vscode
 node_modules
 dist
+/catapult-sdk/_build_browser
+/catapult-sdk/_build

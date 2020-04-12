@@ -1,14 +1,11 @@
 {
   "name": "catapult-sdk",
-  "version": "0.7.20.7",
+  "version": "0.7.20.24",
   "description": "Catapult SDK core",
   "main": "_build/index.js",
-  "config": {
-    "hashingFunction": "sha3"
-  },
   "scripts": {
     "clean": "rimraf _build && mkdir _build && rimraf _build_browser && mkdir _build_browser",
-    "build": "ncp src/ _build && cross-env BABEL_ENV=production HASHING_FUNCTION=$npm_package_config_hashingFunction babel src -d _build_browser --source-maps",
+    "build": "ncp src/ _build && cross-env BABEL_ENV=production babel src -d _build_browser --source-maps",
     "rebuild": "npm run clean && npm run build",
     "test": "mocha --full-trace --recursive",
     "test:coverage": "nyc npm test && nyc report --reporter=text-lcov",
@@ -26,13 +23,14 @@
     "babel-plugin-transform-inline-environment-variables": "^6.8.0",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.5",
+    "coveralls": "^3.0.9",
     "cross-env": "^5.2.0",
-    "eslint": "^6.0.1",
-    "eslint-config-airbnb": "^17.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^2.5.0",
     "mocha": "^6.1.4",
     "mocha-jenkins-reporter": "^0.4.1",
     "ncp": "^2.0.0",
@@ -41,6 +39,7 @@
   },
   "dependencies": {
     "js-sha3": "^0.8.0",
+    "long": "^4.0.0",
     "ripemd160": "^2.0.2",
     "tweetnacl": "^1.0.1"
   },
