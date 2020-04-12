@@ -18,47 +18,52 @@ const options = {
     groups: {
         1: {
             color: {
-                border: '#5E3023',
-                background: '#F3E9DC',
+                border: '#158CBA',
+                background: '#158CBA',
                 highlight: {
-                    border: '#5E3023',
-                    background: '#F3E9DC',
-                }
-            },
-        },
-        2: {
-            color: {
-                border: '#F3E9DC',
-                background: '#5E3023',
-                highlight: {
-                    border: '#F3E9DC',
-                    background: '#5E3023',
+                    border: '#158CBA',
+                    background: '#158CBA'
                 }
             },
             font: {
-                color: '#F3E9DC'
+                color: '#fff'
+            }
+        },
+        2: {
+            color: {
+                border: '#fd7e14',
+                background: '#fd7e14',
+                highlight: {
+                    border: '#fd7e14',
+                    background: '#fd7e14',
+                }
+            },
+            font: {
+                color: '#fff'
             }
         },
         3: {
             color: {
-                border: '#5E3023',
-                background: '#f3cd88',
+                border: '#e83e8c',
+                background: '#e83e8c',
                 highlight: {
-                    border: '#5E3023',
-                    background: '#f3cd88',
+                    border: '#e83e8c',
+                    background: '#e83e8c',
                 }
             },
+            font: {
+                color: '#fff'
+            }
         }
     },
     edges: {
         color: {
-            color:'#C08552',
-            highlight:'#5E3023'
+            color:'#adb5bd',
+            highlight:'#999'
         },
         font: {
             size: 6,
             bold: {
-                color: '#343434',
                 size: 20, // px
                 face: 'arial',
                 vadjust: 0,

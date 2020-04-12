@@ -1,13 +1,6 @@
-$primary: #c8a05c;
-$secondary: #999999;
-$success: #71ab54;
-$info: #2e3a3e;
-$warning: #ef9a1c;
-$danger: #f44336;
-$light: #F3E9DC;
-$dark: #5E3023;
-
+@import "~bootswatch/dist/lumen/variables";
 @import '~bootstrap/scss/bootstrap';
+@import "~bootswatch/dist/lumen/bootswatch";
 @import '~tabulator-tables/src/scss/tabulator_simple.scss';
 
 #mynetwork {
@@ -42,20 +35,20 @@ $dark: #5E3023;
     width: 8rem;
     border-width: 1px;
     border-style: solid;
+    color: $white;
 }
 
 #legend1 {
-    border-color: #5E3023;
-    background: #F3E9DC;
+    border-color: $blue;
+    background-color: $blue;
 }
 
 #legend2 {
-    border-color: #F3E9DC;
-    background: #5E3023;
-    color: #F3E9DC;
+    border-color: $orange;
+    background-color: $orange;
 }
 
 #legend3 {
-    border-color: #5E3023;
-    background: #f3cd88;
+    border-color: $pink;
+    background-color: $pink;
 }
