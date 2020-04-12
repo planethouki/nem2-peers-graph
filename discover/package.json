@@ -4,11 +4,10 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "yarn fetch && yarn generate",
+    "start": "yarn fetch && yarn generate:vis && yarn generate:geo",
     "fetch": "node fetchPeers.js",
     "generate:vis": "node generateVisData.js",
-    "generate:geo": "node fetchGeoData.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate:geo": "node fetchGeoData.js"
   },
   "dependencies": {
     "async": "^3.1.0",

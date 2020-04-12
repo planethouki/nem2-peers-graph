@@ -8,10 +8,11 @@ const config = {
     clientPrivateKey: 'E8532B288B1FBBCD846A99A64D2F42748A5F26C7891BB0FA2D711DAACBAB3718'
 };
 const startNode = {
-    "publicKey": "945FE33CEBE8EA7B3F7530A57649E4575F5DCE8741B94949BB105E2A1996A349",
+    "publicKey": "F2EBF3EF755B98FC0756630BFBA85B353FA19E13C26D27EEC4AB8B7796385BBF",
     "port": 7900,
-    "host": "test-api.48gh23s.xyz"
+    "host": "beacon-02.us-west-1.symboldev.network"
 };
+const maxDepth = 1;
 
 
 let peersInfo = {};
@@ -20,7 +21,7 @@ function recursion(node, depth, callback) {
     if (peersInfo[node.publicKey]) {
         return callback();
     }
-    if (depth > 1) {
+    if (depth > maxDepth) {
         return callback();
     }
     nodePeers(config, node, (err, peers) => {

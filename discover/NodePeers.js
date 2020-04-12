@@ -55,6 +55,7 @@ module.exports = function(config, node, callback) {
                 parser.uint32(); // Node size
                 nodeInfo.version = parser.uint32();
                 nodeInfo.publicKey = parser.buffer(catapult.constants.sizes.signerPublicKey).toString('hex').toUpperCase();
+                nodeInfo.networkGenerationHash = parser.buffer(catapult.constants.sizes.hash256).toString('hex').toUpperCase();
                 nodeInfo.roles = parser.uint32();
                 nodeInfo.port = parser.uint16();
                 nodeInfo.networkIdentifier = parser.uint8();
