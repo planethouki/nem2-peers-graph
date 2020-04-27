@@ -11,18 +11,17 @@ const options = {
     nodes: {
         font: {
             size: 10,
-            color: '#5E3023',
         },
         shape: 'box'
     },
     groups: {
         1: {
             color: {
-                border: '#158CBA',
-                background: '#158CBA',
+                border: '#8a4121',
+                background: '#8a4121',
                 highlight: {
-                    border: '#158CBA',
-                    background: '#158CBA'
+                    border: '#8a4121',
+                    background: '#8a4121'
                 }
             },
             font: {
@@ -31,11 +30,11 @@ const options = {
         },
         2: {
             color: {
-                border: '#fd7e14',
-                background: '#fd7e14',
+                border: '#728742',
+                background: '#728742',
                 highlight: {
-                    border: '#fd7e14',
-                    background: '#fd7e14',
+                    border: '#728742',
+                    background: '#728742',
                 }
             },
             font: {
@@ -44,11 +43,11 @@ const options = {
         },
         3: {
             color: {
-                border: '#e83e8c',
-                background: '#e83e8c',
+                border: '#1c315d',
+                background: '#1c315d',
                 highlight: {
-                    border: '#e83e8c',
-                    background: '#e83e8c',
+                    border: '#1c315d',
+                    background: '#1c315d',
                 }
             },
             font: {

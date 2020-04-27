@@ -7,7 +7,8 @@ module.exports = {
     entry: {
         index: './src/index.js',
         peers: './src/peers.js',
-        geos: './src/geos.js'
+        geos: './src/geos.js',
+        rests: './src/rests.js'
     },
     module: {
         rules: [
@@ -43,7 +44,7 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(),
-        ...['index', 'peers', 'geos'].map((name, index, original) => {
+        ...['index', 'peers', 'geos', 'rests'].map((name, index, original) => {
             return new HtmlWebpackPlugin({
                 filename: `${name}.html`,
                 template: `./src/${name}.ejs`,

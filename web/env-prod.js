@@ -15,5 +15,9 @@ module.exports = {
     getGeoData() {
         return fetch('https://tools48gh23s.blob.core.windows.net/data/peers-graph/geos.json?=_' + Date.now())
             .then((geos) => geos.json())
+    },
+    getRestData() {
+        return fetch('https://tools48gh23s.blob.core.windows.net/data/peers-graph/rests.json?=_' + Date.now())
+            .then((geos) => geos.json())
     }
 }

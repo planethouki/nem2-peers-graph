@@ -2,6 +2,7 @@ const nodes = require('../discover/output/nodes.json');
 const edges = require( '../discover/output/edges.json');
 const peers = require( '../discover/output/peers.json');
 const geos = require( '../discover/output/geos.json');
+const rests = require( '../discover/output/rests.json');
 
 module.exports = {
     getGraphData() {
@@ -15,5 +16,8 @@ module.exports = {
     },
     getGeoData() {
         return Promise.resolve(geos)
+    },
+    getRestData() {
+        return Promise.resolve(rests)
     }
 }
