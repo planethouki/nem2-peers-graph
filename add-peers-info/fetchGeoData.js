@@ -1,8 +1,9 @@
+require('dotenv').config();
 const async = require('async');
 const fs = require('fs');
 const request = require('request');
 
-const peers = JSON.parse(fs.readFileSync('./output/peers.json', {encoding: 'utf-8'}));
+const peers = JSON.parse(fs.readFileSync(process.env.PEERS_PATH, {encoding: 'utf-8'}));
 const geos = [];
 
 const regexIp = /^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
@@ -73,7 +74,11 @@ async.waterfall([
     },
     (done) => {
         console.log(geos.length);
-        fs.writeFile('./output/geos.json', JSON.stringify(geos, null, '  '), done);
+        fs.writeFile(
+            `${process.env.OUT_DIR}/geos.json`,
+            JSON.stringify(geos, null, '  '),
+            done
+        );
     }
 ]);
 

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
@@ -94,8 +95,11 @@ const main = async (peers) => {
     return output;
 }
 
-const peers = JSON.parse(fs.readFileSync('./output/peers.json', {encoding: 'utf-8'}));
+const peers = JSON.parse(fs.readFileSync(process.env.PEERS_PATH, {encoding: 'utf-8'}));
 
 main(peers).then((rests) => {
-   fs.writeFileSync('./output/rests.json', JSON.stringify(rests, null, '  '))
+   fs.writeFileSync(
+       `${process.env.OUT_DIR}/rests.json`,
+       JSON.stringify(rests, null, '  ')
+   );
 });

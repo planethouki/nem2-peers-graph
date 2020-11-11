@@ -1,7 +1,8 @@
+require('dotenv').config();
 const fs = require('fs');
 
 new Promise((resolve) => {
-    const peersJson = fs.readFileSync('./output/peers.json', {encoding: 'utf-8'});
+    const peersJson = fs.readFileSync(process.env.PEERS_PATH, {encoding: 'utf-8'});
     const peersInfo = JSON.parse(peersJson);
     resolve(peersInfo)
 })
@@ -30,7 +31,7 @@ new Promise((resolve) => {
                 }
             }
         }
-        fs.writeFileSync('./output/nodes.json', JSON.stringify(nodes, null, '  '));
-        fs.writeFileSync('./output/edges.json', JSON.stringify(edges, null, '  '));
+        fs.writeFileSync(`${process.env.OUT_DIR}/vis-nodes.json`, JSON.stringify(nodes, null, '  '));
+        fs.writeFileSync(`${process.env.OUT_DIR}/vis-edges.json`, JSON.stringify(edges, null, '  '));
     });
 
