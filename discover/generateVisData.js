@@ -1,21 +1,4 @@
-process.env.HASHING_FUNCTION = 'keccak';
-const nodePeers = require('./NodePeers');
-const nodeInfo = require('./NodeInfo');
-const async = require('async');
 const fs = require('fs');
-
-const config = {
-    clientPrivateKey: 'E8532B288B1FBBCD846A99A64D2F42748A5F26C7891BB0FA2D711DAACBAB3718'
-};
-const startNode = {
-    "version": 0,
-    "publicKey": "945FE33CEBE8EA7B3F7530A57649E4575F5DCE8741B94949BB105E2A1996A349",
-    "roles": 3,
-    "port": 7900,
-    "networkIdentifier": 152,
-    "host": "test-api.48gh23s.xyz",
-    "friendlyName": "test-api.48gh23s.xyz"
-};
 
 new Promise((resolve) => {
     const peersJson = fs.readFileSync('./output/peers.json', {encoding: 'utf-8'});
