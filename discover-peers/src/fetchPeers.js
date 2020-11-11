@@ -1,3 +1,4 @@
+require('dotenv').config();
 const async = require('async');
 const fs = require('fs');
 const catapult = require('catapult-sdk');
@@ -5,7 +6,7 @@ const NodePeers = require('./NodePeers');
 const NodeInfo = require('./NodeInfo');
 const NodeConnection = require('./NodeConnection');
 
-const certDir = './cert'
+const certDir = process.env.CERT_DIR;
 
 const config = {
     certificate: fs.readFileSync(`${certDir}/node.crt.pem`),
@@ -13,17 +14,12 @@ const config = {
     caCertificate: fs.readFileSync(`${certDir}/ca.cert.pem`)
 };
 
-// const startNode = {
-//     port: 7900,
-//     host: "api-01.ap-northeast-1.0.10.0.x.symboldev.network"
-// }
-
 const startNode = {
-    "port": 7900,
-    "host": "54.238.93.124"
+    port: Number(process.env.PORT),
+    host: process.env.HOST
 };
 
-const maxDepth = 1;
+const maxDepth = Number(process.env.MAX_DEPTH);
 
 let peersInfo = {};
 
