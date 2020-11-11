@@ -31,12 +31,12 @@ describe('restrictions plugin', () => {
 			const accountRestrictionTypeBlockOffset = 0x8000;
 
 			// Assert:
-			expect(AccountRestrictionType.addressAllow).to.equal(1);
-			expect(AccountRestrictionType.addressBlock).to.equal(1 + accountRestrictionTypeBlockOffset);
-			expect(AccountRestrictionType.mosaicAllow).to.equal(2);
-			expect(AccountRestrictionType.mosaicBlock).to.equal(2 + accountRestrictionTypeBlockOffset);
-			expect(AccountRestrictionType.operationAllow).to.equal(4);
-			expect(AccountRestrictionType.operationBlock).to.equal(4 + accountRestrictionTypeBlockOffset);
+			expect(AccountRestrictionType.addressAllow).to.equal(0x0001);
+			expect(AccountRestrictionType.addressBlock).to.equal(0x0001 + accountRestrictionTypeBlockOffset);
+			expect(AccountRestrictionType.mosaicAllow).to.equal(0x0002);
+			expect(AccountRestrictionType.mosaicBlock).to.equal(0x0002 + accountRestrictionTypeBlockOffset);
+			expect(AccountRestrictionType.operationAllow).to.equal(0x0004);
+			expect(AccountRestrictionType.operationBlock).to.equal(0x0004 + accountRestrictionTypeBlockOffset);
 		});
 	});
 
@@ -56,7 +56,7 @@ describe('restrictions plugin', () => {
 
 		// Assert:
 		it('adds restrictions system schema', () => {
-			expect(Object.keys(modelSchema).length).to.equal(numDefaultKeys + 18);
+			expect(Object.keys(modelSchema).length).to.equal(numDefaultKeys + 15);
 			expect(modelSchema).to.contain.all.keys([
 				'accountRestrictionAddress',
 				'accountRestrictionMosaic',
@@ -64,30 +64,31 @@ describe('restrictions plugin', () => {
 				'accountRestrictions',
 				'accountRestriction.restrictions',
 				'accountRestriction.fallback',
-				'mosaicRestrictionAddress',
-				'mosaicRestrictionGlobal',
-				'mosaicRestriction.mosaicGlobalRestriction',
-				'mosaicGlobalRestriction.entry',
-				'mosaicGlobalRestriction.entry.restriction',
-				'mosaicGlobalRestriction.entry.restriction.restriction',
-				'mosaicRestriction.mosaicAddressRestriction',
-				'mosaicAddressRestriction.entry',
-				'mosaicAddressRestriction.entry.restriction'
+				'mosaicRestrictions',
+				'mosaicRestrictions.entry',
+				'mosaicRestrictions.entry.restrictions',
+				'mosaicRestrictions.entry.restrictions.restriction'
 			].concat(accountRestrictionSchemas));
 		});
 
 		it('adds account restrictions schemas', () => {
 			// - accountRestrictionAddress
-			expect(Object.keys(modelSchema.accountRestrictionAddress).length).to.equal(Object.keys(modelSchema.transaction).length + 2);
-			expect(modelSchema.accountRestrictionAddress).to.contain.all.keys(['restrictionAdditions', 'restrictionDeletions']);
+			expect(Object.keys(modelSchema.accountRestrictionAddress).length).to.equal(Object.keys(modelSchema.transaction).length + 3);
+			expect(modelSchema.accountRestrictionAddress).to.contain.all.keys([
+				'restrictionFlags', 'restrictionAdditions', 'restrictionDeletions'
+			]);
 
 			// - accountRestrictionMosaic
-			expect(Object.keys(modelSchema.accountRestrictionMosaic).length).to.equal(Object.keys(modelSchema.transaction).length + 2);
-			expect(modelSchema.accountRestrictionMosaic).to.contain.all.keys(['restrictionAdditions', 'restrictionDeletions']);
+			expect(Object.keys(modelSchema.accountRestrictionMosaic).length).to.equal(Object.keys(modelSchema.transaction).length + 3);
+			expect(modelSchema.accountRestrictionMosaic).to.contain.all.keys([
+				'restrictionFlags', 'restrictionAdditions', 'restrictionDeletions'
+			]);
 
 			// - accountRestrictionOperation
-			expect(Object.keys(modelSchema.accountRestrictionOperation).length).to.equal(Object.keys(modelSchema.transaction).length + 2);
-			expect(modelSchema.accountRestrictionOperation).to.contain.all.keys(['restrictionAdditions', 'restrictionDeletions']);
+			expect(Object.keys(modelSchema.accountRestrictionOperation).length).to.equal(Object.keys(modelSchema.transaction).length + 3);
+			expect(modelSchema.accountRestrictionOperation).to.contain.all.keys([
+				'restrictionFlags', 'restrictionAdditions', 'restrictionDeletions'
+			]);
 
 			// - accountRestrictions
 			expect(Object.keys(modelSchema.accountRestrictions).length).to.equal(1);
@@ -99,8 +100,8 @@ describe('restrictions plugin', () => {
 
 			// - accountRestriction address, mosaic, and operation restrictions
 			accountRestrictionSchemas.forEach(schema => {
-				expect(Object.keys(modelSchema[schema]).length).to.equal(1);
-				expect(modelSchema[schema]).to.contain.all.keys(['values']);
+				expect(Object.keys(modelSchema[schema]).length).to.equal(2);
+				expect(modelSchema[schema]).to.contain.all.keys(['restrictionFlags', 'values']);
 			});
 		});
 
@@ -126,7 +127,7 @@ describe('restrictions plugin', () => {
 		});
 
 		it('adds mosaic restrictions system schemas', () => {
-			// - mosaic restriction address
+			// - mosaic restriction address transaction
 			expect(Object.keys(modelSchema.mosaicRestrictionAddress).length).to.equal(Object.keys(modelSchema.transaction).length + 5);
 			expect(modelSchema.mosaicRestrictionAddress).to.contain.all.keys([
 				'mosaicId',
@@ -136,64 +137,38 @@ describe('restrictions plugin', () => {
 				'newRestrictionValue'
 			]);
 
-			// - mosaic restriction global
-			expect(Object.keys(modelSchema.mosaicRestrictionGlobal).length).to.equal(Object.keys(modelSchema.transaction).length + 5);
+			// - mosaic restriction global transaction
+			expect(Object.keys(modelSchema.mosaicRestrictionGlobal).length).to.equal(Object.keys(modelSchema.transaction).length + 7);
 			expect(modelSchema.mosaicRestrictionGlobal).to.contain.all.keys([
 				'mosaicId',
 				'referenceMosaicId',
 				'restrictionKey',
 				'previousRestrictionValue',
-				'newRestrictionValue'
+				'newRestrictionValue',
+				'previousRestrictionType',
+				'newRestrictionType'
 			]);
 
-			// - mosaic restriction, mosaic global restriction
-			expect(Object.keys(modelSchema['mosaicRestriction.mosaicGlobalRestriction']).length).to.equal(1);
-			expect(modelSchema['mosaicRestriction.mosaicGlobalRestriction']).to.contain.all.keys([
-				'mosaicRestrictionEntry'
+			// - mosaic restrictions
+			expect(Object.keys(modelSchema.mosaicRestrictions).length).to.equal(2);
+			expect(modelSchema.mosaicRestrictions).to.contain.all.keys(['id', 'mosaicRestrictionEntry']);
+
+			// - mosaicRestriction.entry
+			expect(Object.keys(modelSchema['mosaicRestrictions.entry']).length).to.equal(5);
+			expect(modelSchema['mosaicRestrictions.entry']).to.contain.all.keys([
+				'compositeHash', 'entryType', 'mosaicId', 'targetAddress', 'restrictions'
 			]);
 
-			// - mosaicGlobalRestriction.entry
-			expect(Object.keys(modelSchema['mosaicGlobalRestriction.entry']).length).to.equal(3);
-			expect(modelSchema['mosaicGlobalRestriction.entry']).to.contain.all.keys([
-				'compositeHash',
-				'mosaicId',
-				'restrictions'
+			// - mosaicRestrictions.entry.restrictions
+			expect(Object.keys(modelSchema['mosaicRestrictions.entry.restrictions']).length).to.equal(3);
+			expect(modelSchema['mosaicRestrictions.entry.restrictions']).to.contain.all.keys([
+				'key', 'value', 'restriction'
 			]);
 
-			// - mosaicGlobalRestriction.entry.restriction
-			expect(Object.keys(modelSchema['mosaicGlobalRestriction.entry.restriction']).length).to.equal(2);
-			expect(modelSchema['mosaicGlobalRestriction.entry.restriction']).to.contain.all.keys([
-				'key',
-				'restriction'
-			]);
-
-			// - mosaicGlobalRestriction.entry.restriction.restriction
-			expect(Object.keys(modelSchema['mosaicGlobalRestriction.entry.restriction.restriction']).length).to.equal(2);
-			expect(modelSchema['mosaicGlobalRestriction.entry.restriction.restriction']).to.contain.all.keys([
-				'referenceMosaicId',
-				'restrictionValue'
-			]);
-
-			// - mosaic restriction, mosaic address restriction
-			expect(Object.keys(modelSchema['mosaicRestriction.mosaicAddressRestriction']).length).to.equal(1);
-			expect(modelSchema['mosaicRestriction.mosaicAddressRestriction']).to.contain.all.keys([
-				'mosaicRestrictionEntry'
-			]);
-
-			// - mosaicAddressRestriction.entry
-			expect(Object.keys(modelSchema['mosaicAddressRestriction.entry']).length).to.equal(4);
-			expect(modelSchema['mosaicAddressRestriction.entry']).to.contain.all.keys([
-				'compositeHash',
-				'mosaicId',
-				'targetAddress',
-				'restrictions'
-			]);
-
-			// - mosaicAddressRestriction.entry.restriction
-			expect(Object.keys(modelSchema['mosaicAddressRestriction.entry.restriction']).length).to.equal(2);
-			expect(modelSchema['mosaicAddressRestriction.entry.restriction']).to.contain.all.keys([
-				'key',
-				'value'
+			// - mosaicRestrictions.entry.restrictions.restriction
+			expect(Object.keys(modelSchema['mosaicRestrictions.entry.restrictions.restriction']).length).to.equal(3);
+			expect(modelSchema['mosaicRestrictions.entry.restrictions.restriction']).to.contain.all.keys([
+				'referenceMosaicId', 'restrictionValue', 'restrictionType'
 			]);
 		});
 	});
@@ -367,15 +342,15 @@ describe('restrictions plugin', () => {
 			const getCodec = entityType => getCodecs()[entityType];
 
 			describe('supports mosaic restriction address', () => {
-				const targetAddress = test.random.bytes(test.constants.sizes.addressDecoded); // 25
+				const targetAddress = test.random.bytes(test.constants.sizes.addressDecoded); // 24
 
-				test.binary.test.addAll(getCodec(EntityType.mosaicRestrictionAddress), 57, () => ({
+				test.binary.test.addAll(getCodec(EntityType.mosaicRestrictionAddress), 56, () => ({
 					buffer: Buffer.concat([
 						Buffer.of(0xA4, 0x78, 0xB2, 0x05, 0x04, 0x40, 0x38, 0x36), // mosaicId
 						Buffer.of(0xFF, 0x12, 0x77, 0x31, 0x82, 0x33, 0x32, 0x29), // restrictionKey
 						Buffer.of(0xD3, 0xA1, 0x3E, 0x35, 0x02, 0x22, 0xC5, 0xC4), // previousRestrictionValue
 						Buffer.of(0xCC, 0x33, 0xC2, 0x2A, 0x23, 0x32, 0x67, 0xAC), // newRestrictionValue
-						Buffer.from(targetAddress) // targetAddress 25b
+						Buffer.from(targetAddress) // targetAddress 24b
 					]),
 
 					object: {

@@ -21,6 +21,7 @@
 /** @module plugins/receipts */
 const ModelType = require('../model/ModelType');
 
+// types 2 (balanceCredit), and 3 (balanceDebit) share the schema `receipts.balanceChange`
 const ReceiptType = {
 	1: 'receipts.balanceTransfer',
 	2: 'receipts.balanceChange',
@@ -37,18 +38,15 @@ const getBasicReceiptType = type => ReceiptType[(type & 0xF000) >> 12] || 'recei
  */
 const receiptsPlugin = {
 	registerSchema: builder => {
-		builder.addSchema('receipts', {
-			addressResolutionStatements: { type: ModelType.array, schemaName: 'receipts.addressResolutionStatement' },
-			mosaicResolutionStatements: { type: ModelType.array, schemaName: 'receipts.mosaicResolutionStatement' },
-			transactionStatements: { type: ModelType.array, schemaName: 'receipts.transactionStatement' }
-		});
 		const addStatementSchema = (statementType, schema) => {
-			const schemaName = `receipts.${statementType}Statement`;
+			const schemaName = `${statementType}Statement`;
 			builder.addSchema(schemaName, {
+				id: ModelType.objectId,
 				statement: { type: ModelType.object, schemaName: `${schemaName}.statement` }
 			});
 			builder.addSchema(`${schemaName}.statement`, schema);
 		};
+
 		addStatementSchema('addressResolution', {
 			height: ModelType.uint64,
 			unresolved: ModelType.binary,
@@ -61,40 +59,63 @@ const receiptsPlugin = {
 		});
 		addStatementSchema('transaction', {
 			height: ModelType.uint64,
+			source: { type: ModelType.object, schemaName: 'receipts.source' },
 			receipts: { type: ModelType.array, schemaName: entity => getBasicReceiptType(entity.type) }
 		});
 
+		// addressResolution statements
 		builder.addSchema('receipts.entry.address', {
+			source: { type: ModelType.object, schemaName: 'receipts.source' },
 			resolved: ModelType.binary
 		});
 
+		// mosaicResolution statements
 		builder.addSchema('receipts.entry.mosaic', {
+			source: { type: ModelType.object, schemaName: 'receipts.source' },
 			resolved: ModelType.uint64HexIdentifier
 		});
 
+		// transaction statements
 		builder.addSchema('receipts.balanceChange', {
-			targetPublicKey: ModelType.binary,
+			version: ModelType.int,
+			type: ModelType.int,
+			targetAddress: ModelType.binary,
 			mosaicId: ModelType.uint64HexIdentifier,
 			amount: ModelType.uint64
 		});
 
 		builder.addSchema('receipts.balanceTransfer', {
-			senderPublicKey: ModelType.binary,
+			version: ModelType.int,
+			type: ModelType.int,
+			senderAddress: ModelType.binary,
 			recipientAddress: ModelType.binary,
 			mosaicId: ModelType.uint64HexIdentifier,
 			amount: ModelType.uint64
 		});
 
 		builder.addSchema('receipts.artifactExpiry', {
+			version: ModelType.int,
+			type: ModelType.int,
 			artifactId: ModelType.uint64HexIdentifier
 		});
 
 		builder.addSchema('receipts.inflation', {
+			version: ModelType.int,
+			type: ModelType.int,
 			mosaicId: ModelType.uint64HexIdentifier,
 			amount: ModelType.uint64
 		});
 
-		builder.addSchema('receipts.unknown', {});
+		builder.addSchema('receipts.unknown', {
+			version: ModelType.int,
+			type: ModelType.int
+		});
+
+		// receipts source schema
+		builder.addSchema('receipts.source', {
+			primaryId: ModelType.int,
+			secondaryId: ModelType.int
+		});
 	},
 
 	registerCodecs: () => {}

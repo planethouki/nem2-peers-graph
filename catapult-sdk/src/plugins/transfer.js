@@ -33,11 +33,8 @@ const transferPlugin = {
 	registerSchema: builder => {
 		builder.addTransactionSupport(EntityType.transfer, {
 			recipientAddress: ModelType.binary,
-			message: { type: ModelType.object, schemaName: 'transfer.message' },
+			message: ModelType.binary,
 			mosaics: { type: ModelType.array, schemaName: 'mosaic' }
-		});
-		builder.addSchema('transfer.message', {
-			payload: ModelType.binary
 		});
 	},
 
@@ -47,10 +44,11 @@ const transferPlugin = {
 				const transaction = {};
 				transaction.recipientAddress = parser.buffer(constants.sizes.addressDecoded);
 
-				const numMosaics = parser.uint8();
 				const messageSize = parser.uint16();
+				const numMosaics = parser.uint8();
 
 				transaction.transferTransactionBody_Reserved1 = parser.uint32();
+				transaction.transferTransactionBody_Reserved2 = parser.uint8();
 
 				if (0 < numMosaics) {
 					transaction.mosaics = [];
@@ -61,11 +59,8 @@ const transferPlugin = {
 					}
 				}
 
-				if (0 < messageSize) {
-					transaction.message = {};
-					transaction.message.type = parser.uint8();
-					transaction.message.payload = 1 < messageSize ? parser.buffer(messageSize - 1) : [];
-				}
+				if (0 < messageSize)
+					transaction.message = parser.buffer(messageSize);
 
 				return transaction;
 			},
@@ -73,18 +68,13 @@ const transferPlugin = {
 			serialize: (transaction, serializer) => {
 				serializer.writeBuffer(transaction.recipientAddress);
 
+				serializer.writeUint16(transaction.message ? transaction.message.length : 0);
+
 				const numMosaics = transaction.mosaics ? transaction.mosaics.length : 0;
 				serializer.writeUint8(numMosaics);
 
-				let payloadSize = 0;
-				if (transaction.message) {
-					payloadSize = transaction.message.payload.length;
-					serializer.writeUint16(payloadSize + 1);
-				} else {
-					serializer.writeUint16(0);
-				}
-
 				serializer.writeUint32(transaction.transferTransactionBody_Reserved1);
+				serializer.writeUint8(transaction.transferTransactionBody_Reserved2);
 
 				if (0 < numMosaics) {
 					transaction.mosaics.forEach(mosaic => {
@@ -93,12 +83,8 @@ const transferPlugin = {
 					});
 				}
 
-				if (transaction.message) {
-					serializer.writeUint8(transaction.message.type);
-
-					if (0 < payloadSize)
-						serializer.writeBuffer(transaction.message.payload);
-				}
+				if (transaction.message)
+					serializer.writeBuffer(transaction.message);
 			}
 		});
 	}

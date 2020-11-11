@@ -32,30 +32,34 @@ const constants = { sizes };
 const lockSecretPlugin = {
 	registerSchema: builder => {
 		builder.addSchema('secretLockInfo', {
+			id: ModelType.objectId,
 			lock: { type: ModelType.object, schemaName: 'secretLockInfo.lock' }
 		});
 		builder.addSchema('secretLockInfo.lock', {
-			senderPublicKey: ModelType.binary,
-			senderAddress: ModelType.binary,
+			ownerAddress: ModelType.binary,
 			mosaicId: ModelType.uint64HexIdentifier,
 			amount: ModelType.uint64,
 			endHeight: ModelType.uint64,
+			status: ModelType.int,
+			hashAlgorithm: ModelType.int,
 			secret: ModelType.binary,
 			recipientAddress: ModelType.binary,
 			compositeHash: ModelType.binary
 		});
 
 		builder.addTransactionSupport(EntityType.secretLock, {
+			recipientAddress: ModelType.binary,
 			secret: ModelType.binary,
 			mosaicId: ModelType.uint64HexIdentifier,
 			amount: ModelType.uint64,
 			duration: ModelType.uint64,
-			recipientAddress: ModelType.binary
+			hashAlgorithm: ModelType.int
 		});
 		builder.addTransactionSupport(EntityType.secretProof, {
 			secret: ModelType.binary,
 			recipientAddress: ModelType.binary,
-			proof: ModelType.binary
+			proof: ModelType.binary,
+			hashAlgorithm: ModelType.int
 		});
 	},
 
@@ -63,41 +67,41 @@ const lockSecretPlugin = {
 		codecBuilder.addTransactionSupport(EntityType.secretLock, {
 			deserialize: parser => {
 				const transaction = {};
+				transaction.recipientAddress = parser.buffer(constants.sizes.addressDecoded);
 				transaction.secret = parser.buffer(constants.sizes.hash256);
 				transaction.mosaicId = parser.uint64();
 				transaction.amount = parser.uint64();
 				transaction.duration = parser.uint64();
 				transaction.hashAlgorithm = parser.uint8();
-				transaction.recipientAddress = parser.buffer(constants.sizes.addressDecoded);
 				return transaction;
 			},
 
 			serialize: (transaction, serializer) => {
+				serializer.writeBuffer(transaction.recipientAddress);
 				serializer.writeBuffer(transaction.secret);
 				serializer.writeUint64(transaction.mosaicId);
 				serializer.writeUint64(transaction.amount);
 				serializer.writeUint64(transaction.duration);
 				serializer.writeUint8(transaction.hashAlgorithm);
-				serializer.writeBuffer(transaction.recipientAddress);
 			}
 		});
 
 		codecBuilder.addTransactionSupport(EntityType.secretProof, {
 			deserialize: parser => {
 				const transaction = {};
+				transaction.recipientAddress = parser.buffer(constants.sizes.addressDecoded);
 				transaction.secret = parser.buffer(constants.sizes.hash256);
 				const proofSize = parser.uint16();
 				transaction.hashAlgorithm = parser.uint8();
-				transaction.recipientAddress = parser.buffer(constants.sizes.addressDecoded);
 				transaction.proof = parser.buffer(proofSize);
 				return transaction;
 			},
 
 			serialize: (transaction, serializer) => {
+				serializer.writeBuffer(transaction.recipientAddress);
 				serializer.writeBuffer(transaction.secret);
 				serializer.writeUint16(transaction.proof.length);
 				serializer.writeUint8(transaction.hashAlgorithm);
-				serializer.writeBuffer(transaction.recipientAddress);
 				serializer.writeBuffer(transaction.proof);
 			}
 		});

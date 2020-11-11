@@ -27,10 +27,12 @@ const modelSchema = new ModelSchemaBuilder().build();
 const formattingRules = {
 	[ModelType.none]: () => 'none',
 	[ModelType.binary]: () => 'binary',
+	[ModelType.uint]: () => 'uint',
 	[ModelType.uint64]: () => 'uint64',
 	[ModelType.uint64HexIdentifier]: () => 'uint64HexIdentifier',
 	[ModelType.objectId]: () => 'objectId',
-	[ModelType.string]: () => 'string'
+	[ModelType.string]: () => 'string',
+	[ModelType.int]: () => 'int'
 };
 
 describe('model formatter builder', () => {
@@ -46,12 +48,12 @@ describe('model formatter builder', () => {
 			expect(subFormatterTypes).to.deep.equal([
 				'accountWithMetadata',
 				'blockHeaderWithMetadata',
-				'blockHeaderWithMetadataAndId',
 				'transactionWithMetadata',
 
-				'chainStatistic',
-				'chainStatisticCurrent',
+				'chainInfo',
 				'merkleProofInfo',
+				'finalizedBlock',
+				'finalizationProof',
 				'nodeHealth',
 				'nodeInfo',
 				'nodeTime',
@@ -69,14 +71,15 @@ describe('model formatter builder', () => {
 			// Act:
 			const result = formatter.transactionWithMetadata.format({
 				meta: {
-					id: 0,
 					height: 0,
-					hash: 0
+					hash: 0,
+					index: 0
 				},
 				transaction: {
 					signature: 0,
 					signerPublicKey: 0,
 					version: 0,
+					network: 0,
 					type: 0,
 
 					maxFee: 0,
@@ -87,15 +90,16 @@ describe('model formatter builder', () => {
 			// Assert:
 			expect(result).to.deep.equal({
 				meta: {
-					id: 'objectId',
 					height: 'uint64',
-					hash: 'binary'
+					hash: 'binary',
+					index: 'int'
 				},
 				transaction: {
 					signature: 'binary',
 					signerPublicKey: 'binary',
-					version: 'none',
-					type: 'none',
+					version: 'int',
+					network: 'int',
+					type: 'int',
 
 					maxFee: 'uint64',
 					deadline: 'uint64'
@@ -109,75 +113,21 @@ describe('model formatter builder', () => {
 
 			// Act:
 			const result = formatter.blockHeaderWithMetadata.format({
-				meta: {
-					hash: 0,
-					generationHash: 0,
-					totalFee: 0,
-					numTransactions: 0,
-					stateHashSubCacheMerkleRoots: [0]
-				},
-				block: {
-					signature: 0,
-					signerPublicKey: 0,
-					version: 0,
-					type: 0,
-
-					height: 0,
-					timestamp: 0,
-					difficulty: 0,
-					previousBlockHash: 0,
-					transactionsHash: 0,
-					receiptsHash: 0,
-					stateHash: 0,
-					beneficiaryPublicKey: 0
-				}
-			});
-
-			// Assert:
-			expect(result).to.deep.equal({
-				meta: {
-					hash: 'binary',
-					generationHash: 'binary',
-					totalFee: 'uint64',
-					numTransactions: 'none',
-					stateHashSubCacheMerkleRoots: ['binary']
-				},
-				block: {
-					signature: 'binary',
-					signerPublicKey: 'binary',
-					version: 'none',
-					type: 'none',
-
-					height: 'uint64',
-					timestamp: 'uint64',
-					difficulty: 'uint64',
-					previousBlockHash: 'binary',
-					transactionsHash: 'binary',
-					receiptsHash: 'binary',
-					stateHash: 'binary',
-					beneficiaryPublicKey: 'binary'
-				}
-			});
-		});
-
-		it('can format block header with metadata and Id', () => {
-			// Arrange:
-			const formatter = new ModelFormatterBuilder().build(modelSchema, formattingRules);
-
-			// Act:
-			const result = formatter.blockHeaderWithMetadataAndId.format({
 				id: 0x5E3CD1498E18164DD5536133,
 				meta: {
 					hash: 0,
 					generationHash: 0,
 					totalFee: 0,
-					numTransactions: 0,
+					totalTransactionsCount: 0,
+					transactionsCount: 0,
+					statementsCount: 0,
 					stateHashSubCacheMerkleRoots: [0]
 				},
 				block: {
 					signature: 0,
 					signerPublicKey: 0,
 					version: 0,
+					network: 0,
 					type: 0,
 
 					height: 0,
@@ -187,7 +137,7 @@ describe('model formatter builder', () => {
 					transactionsHash: 0,
 					receiptsHash: 0,
 					stateHash: 0,
-					beneficiaryPublicKey: 0
+					beneficiaryAddress: 0
 				}
 			});
 
@@ -198,14 +148,18 @@ describe('model formatter builder', () => {
 					hash: 'binary',
 					generationHash: 'binary',
 					totalFee: 'uint64',
-					numTransactions: 'none',
+					transactionsCount: 'int',
+					statementsCount: 'int',
+					totalTransactionsCount: 'int',
+
 					stateHashSubCacheMerkleRoots: ['binary']
 				},
 				block: {
 					signature: 'binary',
 					signerPublicKey: 'binary',
-					version: 'none',
-					type: 'none',
+					version: 'int',
+					network: 'int',
+					type: 'int',
 
 					height: 'uint64',
 					timestamp: 'uint64',
@@ -214,7 +168,7 @@ describe('model formatter builder', () => {
 					transactionsHash: 'binary',
 					receiptsHash: 'binary',
 					stateHash: 'binary',
-					beneficiaryPublicKey: 'binary'
+					beneficiaryAddress: 'binary'
 				}
 			});
 		});
@@ -225,13 +179,13 @@ describe('model formatter builder', () => {
 
 			// Act:
 			const result = formatter.accountWithMetadata.format({
-				meta: {
-				},
+				id: 0,
 				account: {
 					address: 0,
 					addressHeight: 0,
 					publicKey: 0,
 					publicKeyHeight: 0,
+					accountType: 0,
 					importance: 0,
 					importanceHeight: 0,
 					mosaics: [
@@ -243,13 +197,13 @@ describe('model formatter builder', () => {
 
 			// Assert:
 			expect(result).to.deep.equal({
-				meta: {
-				},
+				id: 'objectId',
 				account: {
 					address: 'binary',
 					addressHeight: 'uint64',
 					publicKey: 'binary',
 					publicKeyHeight: 'uint64',
+					accountType: 'int',
 					importance: 'uint64',
 					importanceHeight: 'uint64',
 					mosaics: [
@@ -265,20 +219,28 @@ describe('model formatter builder', () => {
 			const formatter = new ModelFormatterBuilder().build(modelSchema, formattingRules);
 
 			// Act:
-			const result = formatter.chainStatistic.format({
-				current: {
+			const result = formatter.chainInfo.format({
+				height: 0,
+				scoreLow: 0,
+				scoreHigh: 0,
+				latestFinalizedBlock: {
 					height: 0,
-					scoreLow: 0,
-					scoreHigh: 0
+					hash: 0,
+					finalizationEpoch: 0,
+					finalizationPoint: 0
 				}
 			});
 
 			// Assert:
 			expect(result).to.deep.equal({
-				current: {
+				height: 'uint64',
+				scoreLow: 'uint64',
+				scoreHigh: 'uint64',
+				latestFinalizedBlock: {
 					height: 'uint64',
-					scoreLow: 'uint64',
-					scoreHigh: 'uint64'
+					hash: 'binary',
+					finalizationEpoch: 'uint',
+					finalizationPoint: 'uint'
 				}
 			});
 		});
@@ -296,9 +258,9 @@ describe('model formatter builder', () => {
 
 			// Assert:
 			expect(result).to.deep.equal({
-				numBlocks: 'none',
-				numTransactions: 'none',
-				numAccounts: 'none'
+				numBlocks: 'int',
+				numTransactions: 'int',
+				numAccounts: 'int'
 			});
 		});
 	});

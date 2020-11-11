@@ -46,16 +46,19 @@ const namespacePlugin = {
 	registerSchema: builder => {
 		builder.addTransactionSupport(EntityType.aliasAddress, {
 			namespaceId: ModelType.uint64HexIdentifier,
-			address: ModelType.binary
+			address: ModelType.binary,
+			aliasAction: ModelType.int
 		});
 
 		builder.addTransactionSupport(EntityType.aliasMosaic, {
 			namespaceId: ModelType.uint64HexIdentifier,
-			mosaicId: ModelType.uint64HexIdentifier
+			mosaicId: ModelType.uint64HexIdentifier,
+			aliasAction: ModelType.int
 		});
 
 		builder.addTransactionSupport(EntityType.registerNamespace, {
 			id: ModelType.uint64HexIdentifier,
+			registrationType: ModelType.int,
 			parentId: ModelType.uint64HexIdentifier,
 			duration: ModelType.uint64,
 			name: ModelType.string
@@ -66,11 +69,19 @@ const namespacePlugin = {
 		});
 
 		builder.addSchema('namespaceDescriptor', {
-			meta: { type: ModelType.object, schemaName: 'transactionMetadata' },
+			id: ModelType.objectId,
+			meta: { type: ModelType.object, schemaName: 'namespaceDescriptor.meta' },
 			namespace: { type: ModelType.object, schemaName: 'namespaceDescriptor.namespace' }
 		});
 
+		builder.addSchema('namespaceDescriptor.meta', {
+			active: ModelType.boolean,
+			index: ModelType.int
+		});
+
 		builder.addSchema('namespaceDescriptor.namespace', {
+			registrationType: ModelType.int,
+			depth: ModelType.int,
 			level0: ModelType.uint64HexIdentifier,
 			level1: ModelType.uint64HexIdentifier,
 			level2: ModelType.uint64HexIdentifier,
@@ -78,7 +89,6 @@ const namespacePlugin = {
 			alias: { type: ModelType.object, schemaName: entity => getAliasBasicType(entity.type) },
 
 			parentId: ModelType.uint64HexIdentifier,
-			ownerPublicKey: ModelType.binary,
 			ownerAddress: ModelType.binary,
 
 			startHeight: ModelType.uint64,
@@ -86,14 +96,18 @@ const namespacePlugin = {
 		});
 
 		builder.addSchema('namespaceDescriptor.alias.mosaic', {
+			type: ModelType.int,
 			mosaicId: ModelType.uint64HexIdentifier
 		});
 
 		builder.addSchema('namespaceDescriptor.alias.address', {
+			type: ModelType.int,
 			address: ModelType.binary
 		});
 
-		builder.addSchema('namespaceDescriptor.alias.empty', {});
+		builder.addSchema('namespaceDescriptor.alias.empty', {
+			type: ModelType.int
+		});
 
 		builder.addSchema('namespaceNameTuple', {
 			id: ModelType.uint64HexIdentifier,

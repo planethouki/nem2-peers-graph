@@ -41,28 +41,34 @@ class ModelSchemaBuilder {
 			// endregion
 
 			// region block
-
 			blockHeader: {
+				size: ModelType.int,
+				version: ModelType.int,
+				network: ModelType.int,
+				type: ModelType.int,
 				height: ModelType.uint64,
 				timestamp: ModelType.uint64,
 				difficulty: ModelType.uint64,
+				proofGamma: ModelType.binary,
+				proofVerificationHash: ModelType.binary,
+				proofScalar: ModelType.binary,
 				previousBlockHash: ModelType.binary,
 				transactionsHash: ModelType.binary,
 				receiptsHash: ModelType.binary,
 				stateHash: ModelType.binary,
-				beneficiaryPublicKey: ModelType.binary
+				beneficiaryAddress: ModelType.binary,
+				feeMultiplier: ModelType.int
 			},
 			blockHeaderMetadata: {
 				hash: ModelType.binary,
 				generationHash: ModelType.binary,
 				totalFee: ModelType.uint64,
-				stateHashSubCacheMerkleRoots: { type: ModelType.array, schemaName: ModelType.binary }
+				stateHashSubCacheMerkleRoots: { type: ModelType.array, schemaName: ModelType.binary },
+				totalTransactionsCount: ModelType.int,
+				transactionsCount: ModelType.int,
+				statementsCount: ModelType.int
 			},
 			blockHeaderWithMetadata: {
-				meta: { type: ModelType.object, schemaName: 'blockHeaderMetadata' },
-				block: { type: ModelType.object, schemaName: 'blockHeader' }
-			},
-			blockHeaderWithMetadataAndId: {
 				id: ModelType.objectId,
 				meta: { type: ModelType.object, schemaName: 'blockHeaderMetadata' },
 				block: { type: ModelType.object, schemaName: 'blockHeader' }
@@ -71,7 +77,39 @@ class ModelSchemaBuilder {
 				merklePath: { type: ModelType.array, schemaName: 'merkleProofInfoPathNode' }
 			},
 			merkleProofInfoPathNode: {
-				hash: ModelType.binary
+				hash: ModelType.binary,
+				position: ModelType.string
+			},
+
+			finalizedBlock: {
+				height: ModelType.uint64,
+				hash: ModelType.binary,
+				finalizationEpoch: ModelType.uint,
+				finalizationPoint: ModelType.uint
+			},
+
+			finalizationProof: {
+				version: ModelType.uint,
+				finalizationEpoch: ModelType.uint,
+				finalizationPoint: ModelType.uint,
+				height: ModelType.uint64,
+				hash: ModelType.binary,
+				messageGroups: { type: ModelType.array, schemaName: 'messageGroup' }
+			},
+			messageGroup: {
+				stage: ModelType.uint,
+				height: ModelType.uint64,
+				hashes: { type: ModelType.array, schemaName: ModelType.binary },
+				signatures: { type: ModelType.array, schemaName: 'bmTreeSignature' }
+			},
+			bmTreeSignature: {
+				root: { type: ModelType.object, schemaName: 'parentPublicKeySignaturePair' },
+				top: { type: ModelType.object, schemaName: 'parentPublicKeySignaturePair' },
+				bottom: { type: ModelType.object, schemaName: 'parentPublicKeySignaturePair' }
+			},
+			parentPublicKeySignaturePair: {
+				parentPublicKey: ModelType.binary,
+				signature: ModelType.binary
 			},
 
 			// endregion
@@ -79,18 +117,23 @@ class ModelSchemaBuilder {
 			// region transaction
 
 			transaction: {
+				size: ModelType.int,
+				version: ModelType.int,
+				network: ModelType.int,
+				type: ModelType.int,
 				deadline: ModelType.uint64,
 				maxFee: ModelType.uint64
 			},
 			transactionMetadata: {
 				aggregateHash: ModelType.binary,
 				aggregateId: ModelType.objectId,
-				id: ModelType.objectId,
 				height: ModelType.uint64,
 				hash: ModelType.binary,
-				merkleComponentHash: ModelType.binary
+				merkleComponentHash: ModelType.binary,
+				index: ModelType.int
 			},
 			transactionWithMetadata: {
+				id: ModelType.objectId,
 				meta: { type: ModelType.object, schemaName: 'transactionMetadata' },
 				transaction: {
 					type: ModelType.object,
@@ -104,8 +147,8 @@ class ModelSchemaBuilder {
 			// region transactionStatus
 
 			transactionStatus: {
+				group: ModelType.string,
 				hash: ModelType.binary,
-				address: ModelType.binary,
 				code: ModelType.statusCode,
 				deadline: ModelType.uint64,
 				height: ModelType.uint64
@@ -115,52 +158,76 @@ class ModelSchemaBuilder {
 
 			// region account
 
+			accountWithMetadata: {
+				id: ModelType.objectId,
+				account: { type: ModelType.object, schemaName: 'account' }
+			},
 			account: {
 				address: ModelType.binary,
 				addressHeight: ModelType.uint64,
 				publicKey: ModelType.binary,
 				publicKeyHeight: ModelType.uint64,
-				linkedAccountKey: ModelType.binary,
+				accountType: ModelType.int,
+				supplementalPublicKeys: { type: ModelType.object, schemaName: 'supplementalPublicKey' },
 				importance: ModelType.uint64,
 				importanceHeight: ModelType.uint64,
 				activityBuckets: { type: ModelType.array, schemaName: 'activityBucket' },
 				mosaics: { type: ModelType.array, schemaName: 'mosaic' }
 			},
+			supplementalPublicKey: {
+				linked: { type: ModelType.object, schemaName: 'accountLinkPublicKey' },
+				node: { type: ModelType.object, schemaName: 'accountLinkPublicKey' },
+				vrf: { type: ModelType.object, schemaName: 'accountLinkPublicKey' },
+				voting: { type: ModelType.object, schemaName: 'accountLinkPublicKey.voting' }
+			},
 			activityBucket: {
 				startHeight: ModelType.uint64,
 				totalFeesPaid: ModelType.uint64,
+				beneficiaryCount: ModelType.int,
 				rawScore: ModelType.uint64
 			},
 			mosaic: {
 				id: ModelType.uint64HexIdentifier,
 				amount: ModelType.uint64
 			},
-			accountMeta: {
+			accountLinkPublicKey: {
+				publicKey: ModelType.binary
 			},
-			accountWithMetadata: {
-				meta: { type: ModelType.object, schemaName: 'accountMeta' },
-				account: { type: ModelType.object, schemaName: 'account' }
+			'accountLinkPublicKey.voting': {
+				publicKeys: { type: ModelType.array, schemaName: 'votingPublicKey' }
+			},
+			votingPublicKey: {
+				publicKey: ModelType.binary,
+				startEpoch: ModelType.uint,
+				endEpoch: ModelType.uint
 			},
 
 			// endregion
 
 			// region other
 
-			chainStatistic: {
-				current: { type: ModelType.object, schemaName: 'chainStatisticCurrent' }
-			},
-			chainStatisticCurrent: {
+			chainInfo: {
 				height: ModelType.uint64,
 				scoreLow: ModelType.uint64,
-				scoreHigh: ModelType.uint64
+				scoreHigh: ModelType.uint64,
+				latestFinalizedBlock: { type: ModelType.object, schemaName: 'finalizedBlock' }
 			},
 			nodeHealth: {
+				status: { type: ModelType.object, schemaName: 'nodeHealthStatus' }
+			},
+			nodeHealthStatus: {
+				apiNode: ModelType.string,
+				db: ModelType.string
 			},
 			nodeInfo: {
+				version: ModelType.int,
+				roles: ModelType.int,
+				port: ModelType.int,
+				networkIdentifier: ModelType.int,
 				friendlyName: ModelType.string,
 				host: ModelType.string,
 				publicKey: ModelType.binary,
-				networkGenerationHash: ModelType.binary
+				networkGenerationHashSeed: ModelType.binary
 			},
 			communicationTimestamps: {
 				receiveTimestamp: ModelType.uint64,
@@ -170,11 +237,19 @@ class ModelSchemaBuilder {
 				communicationTimestamps: { type: ModelType.object, schemaName: 'communicationTimestamps' }
 			},
 			serverInfo: {
+				serverInfo: { type: ModelType.object, schemaName: 'serverInfoData' }
+			},
+			serverInfoData: {
+				restVersion: ModelType.string,
+				sdkVersion: ModelType.string
 			},
 			stateTree: {
 				tree: { type: ModelType.array, schemaName: ModelType.binary }
 			},
 			storageInfo: {
+				numBlocks: ModelType.int,
+				numTransactions: ModelType.int,
+				numAccounts: ModelType.int
 			}
 
 			// endregion

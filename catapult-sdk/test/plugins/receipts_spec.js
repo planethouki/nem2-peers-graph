@@ -38,99 +38,99 @@ describe('receipts plugin', () => {
 			// Assert:
 			expect(Object.keys(modelSchema).length).to.equal(numDefaultKeys + 14);
 			expect(modelSchema).to.contain.all.keys([
-				'receipts',
-				'receipts.addressResolutionStatement',
-				'receipts.addressResolutionStatement.statement',
-				'receipts.mosaicResolutionStatement',
-				'receipts.mosaicResolutionStatement.statement',
-				'receipts.transactionStatement',
-				'receipts.transactionStatement.statement',
+				'addressResolutionStatement',
+				'addressResolutionStatement.statement',
+				'mosaicResolutionStatement',
+				'mosaicResolutionStatement.statement',
+				'transactionStatement',
+				'transactionStatement.statement',
 				'receipts.balanceChange',
 				'receipts.balanceTransfer',
 				'receipts.artifactExpiry',
 				'receipts.inflation',
 				'receipts.entry.address',
 				'receipts.entry.mosaic',
-				'receipts.unknown'
+				'receipts.unknown',
+				'receipts.source'
 			]);
 
-			// -  receipts
-			expect(Object.keys(modelSchema.receipts).length).to.equal(3);
-			expect(modelSchema.receipts).to.contain.all.keys([
-				'addressResolutionStatements',
-				'mosaicResolutionStatements',
-				'transactionStatements'
-			]);
-
-			// - receipts.addressResolutionStatement
-			// - receipts.mosaicResolutionStatement
-			// - receipts.transactionStatement
+			// - addressResolutionStatement
+			// - mosaicResolutionStatement
+			// - transactionStatement
 			['addressResolution', 'mosaicResolution', 'transaction'].forEach(statementType => {
-				expect(Object.keys(modelSchema[`receipts.${statementType}Statement`]).length).to.equal(1);
-				expect(modelSchema[`receipts.${statementType}Statement`]).to.contain.all.keys(['statement']);
+				expect(Object.keys(modelSchema[`${statementType}Statement`]).length).to.equal(2);
+				expect(modelSchema[`${statementType}Statement`]).to.contain.all.keys(['statement']);
 			});
 
-			// - receipts.addressResolutionStatement.statement
-			expect(Object.keys(modelSchema['receipts.addressResolutionStatement.statement']).length).to.equal(3);
-			expect(modelSchema['receipts.addressResolutionStatement.statement']).to.contain.all.keys([
+			// - addressResolutionStatement.statement
+			expect(Object.keys(modelSchema['addressResolutionStatement.statement']).length).to.equal(3);
+			expect(modelSchema['addressResolutionStatement.statement']).to.contain.all.keys([
 				'height',
 				'unresolved',
 				'resolutionEntries'
 			]);
 
-			// - receipts.mosaicResolutionStatement
-			expect(Object.keys(modelSchema['receipts.mosaicResolutionStatement.statement']).length).to.equal(3);
-			expect(modelSchema['receipts.mosaicResolutionStatement.statement']).to.contain.all.keys([
+			// - mosaicResolutionStatement
+			expect(Object.keys(modelSchema['mosaicResolutionStatement.statement']).length).to.equal(3);
+			expect(modelSchema['mosaicResolutionStatement.statement']).to.contain.all.keys([
 				'height',
 				'unresolved',
 				'resolutionEntries'
 			]);
 
-			// - receipts.transactionStatement
-			expect(Object.keys(modelSchema['receipts.transactionStatement.statement']).length).to.equal(2);
-			expect(modelSchema['receipts.transactionStatement.statement']).to.contain.all.keys([
-				'height',
-				'receipts'
+			// - transactionStatement
+			expect(Object.keys(modelSchema['transactionStatement.statement']).length).to.equal(3);
+			expect(modelSchema['transactionStatement.statement']).to.contain.all.keys([
+				'height', 'source', 'receipts'
 			]);
 
 			// - receipts.entry.address
-			expect(Object.keys(modelSchema['receipts.entry.address']).length).to.equal(1);
+			expect(Object.keys(modelSchema['receipts.entry.address']).length).to.equal(2);
 			expect(modelSchema['receipts.entry.address']).to.contain.all.keys([
-				'resolved'
+				'source', 'resolved'
 			]);
 
 			// - receipts.entry.mosaic
-			expect(Object.keys(modelSchema['receipts.entry.mosaic']).length).to.equal(1);
+			expect(Object.keys(modelSchema['receipts.entry.mosaic']).length).to.equal(2);
 			expect(modelSchema['receipts.entry.mosaic']).to.contain.all.keys([
-				'resolved'
+				'source', 'resolved'
 			]);
 
 			// - receipts.balanceChange
-			expect(Object.keys(modelSchema['receipts.balanceChange']).length).to.equal(3);
-			expect(modelSchema['receipts.balanceChange']).to.contain.all.keys(['targetPublicKey', 'mosaicId', 'amount']);
+			expect(Object.keys(modelSchema['receipts.balanceChange']).length).to.equal(5);
+			expect(modelSchema['receipts.balanceChange']).to.contain.all.keys([
+				'version', 'type', 'targetAddress', 'mosaicId', 'amount'
+			]);
 
 			// - receipts.balanceTransfer
-			expect(Object.keys(modelSchema['receipts.balanceTransfer']).length).to.equal(4);
+			expect(Object.keys(modelSchema['receipts.balanceTransfer']).length).to.equal(6);
 			expect(modelSchema['receipts.balanceTransfer']).to.contain.all.keys([
-				'senderPublicKey',
-				'recipientAddress',
-				'mosaicId',
-				'amount'
+				'version', 'type', 'senderAddress', 'recipientAddress', 'mosaicId', 'amount'
 			]);
 
 			// - receipts.artifactExpiry
-			expect(Object.keys(modelSchema['receipts.artifactExpiry']).length).to.equal(1);
-			expect(modelSchema['receipts.artifactExpiry']).to.contain.all.keys(['artifactId']);
+			expect(Object.keys(modelSchema['receipts.artifactExpiry']).length).to.equal(3);
+			expect(modelSchema['receipts.artifactExpiry']).to.contain.all.keys([
+				'version', 'type', 'artifactId'
+			]);
 
 			// - receipts.inflation
-			expect(Object.keys(modelSchema['receipts.inflation']).length).to.equal(2);
+			expect(Object.keys(modelSchema['receipts.inflation']).length).to.equal(4);
 			expect(modelSchema['receipts.inflation']).to.contain.all.keys([
-				'mosaicId',
-				'amount'
+				'version', 'type', 'mosaicId', 'amount'
 			]);
 
 			// - receipts.unknown
-			expect(Object.keys(modelSchema['receipts.unknown']).length).to.equal(0);
+			expect(Object.keys(modelSchema['receipts.unknown']).length).to.equal(2);
+			expect(modelSchema['receipts.unknown']).to.contain.all.keys([
+				'version', 'type'
+			]);
+
+			// - receipts.source
+			expect(Object.keys(modelSchema['receipts.source']).length).to.equal(2);
+			expect(modelSchema['receipts.source']).to.contain.all.keys([
+				'primaryId', 'secondaryId'
+			]);
 		});
 	});
 
@@ -144,7 +144,8 @@ describe('receipts plugin', () => {
 					[ModelType.uint64]: () => 'uint64',
 					[ModelType.uint64HexIdentifier]: () => 'uint64HexIdentifier',
 					[ModelType.objectId]: () => 'objectId',
-					[ModelType.string]: () => 'string'
+					[ModelType.string]: () => 'string',
+					[ModelType.int]: () => 'int'
 				};
 				const transactionStatement = {
 					statement: {
@@ -160,7 +161,7 @@ describe('receipts plugin', () => {
 				const modelSchema = builder.build();
 				const unwrappedFormattedEntity = schemaFormatter.format(
 					transactionStatement,
-					modelSchema['receipts.transactionStatement'],
+					modelSchema.transactionStatement,
 					modelSchema,
 					formattingRules
 				).statement;
@@ -172,35 +173,12 @@ describe('receipts plugin', () => {
 				return unwrappedFormattedEntity.receipts[0];
 			};
 
-			it('formats balance change receipt type', () => {
-				// Arrange:
-				const balanceChangeReceipt = {
-					version: 1,
-					type: 0x1000,
-					targetPublicKey: null,
-					mosaicId: null,
-					amount: null
-				};
-
-				// Act:
-				const formattedReceipt = formatReceipt(balanceChangeReceipt);
-
-				// Assert:
-				expect(formattedReceipt).to.contain.all.keys([
-					'version',
-					'type',
-					'targetPublicKey',
-					'mosaicId',
-					'amount'
-				]);
-			});
-
 			it('formats balance transfer receipt type', () => {
 				// Arrange:
 				const balanceTransferReceipt = {
 					version: 1,
-					type: 0x2000,
-					senderPublicKey: null,
+					type: 0x1000,
+					senderAddress: null,
 					recipientAddress: null,
 					mosaicId: null,
 					amount: null
@@ -213,8 +191,31 @@ describe('receipts plugin', () => {
 				expect(formattedReceipt).to.contain.all.keys([
 					'version',
 					'type',
-					'senderPublicKey',
+					'senderAddress',
 					'recipientAddress',
+					'mosaicId',
+					'amount'
+				]);
+			});
+
+			it('formats balance change receipt type', () => {
+				// Arrange:
+				const balanceChangeReceipt = {
+					version: 1,
+					type: 0x2000,
+					targetAddress: null,
+					mosaicId: null,
+					amount: null
+				};
+
+				// Act:
+				const formattedReceipt = formatReceipt(balanceChangeReceipt);
+
+				// Assert:
+				expect(formattedReceipt).to.contain.all.keys([
+					'version',
+					'type',
+					'targetAddress',
 					'mosaicId',
 					'amount'
 				]);
@@ -224,7 +225,7 @@ describe('receipts plugin', () => {
 				// Arrange:
 				const artifactExpiryReceipt = {
 					version: 1,
-					type: 0x3000,
+					type: 0x4000,
 					artifactId: null
 				};
 

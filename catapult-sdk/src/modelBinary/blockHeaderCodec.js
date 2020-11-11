@@ -34,11 +34,14 @@ const blockHeaderCodec = {
 		blockHeader.height = parser.uint64();
 		blockHeader.timestamp = parser.uint64();
 		blockHeader.difficulty = parser.uint64();
+		blockHeader.proofGamma = parser.buffer(constants.sizes.vrfProof.gamma);
+		blockHeader.proofVerificationHash = parser.buffer(constants.sizes.vrfProof.verificationHash);
+		blockHeader.proofScalar = parser.buffer(constants.sizes.vrfProof.scalar);
 		blockHeader.previousBlockHash = parser.buffer(constants.sizes.hash256);
 		blockHeader.transactionsHash = parser.buffer(constants.sizes.hash256);
 		blockHeader.receiptsHash = parser.buffer(constants.sizes.hash256);
 		blockHeader.stateHash = parser.buffer(constants.sizes.hash256);
-		blockHeader.beneficiaryPublicKey = parser.buffer(constants.sizes.signerPublicKey);
+		blockHeader.beneficiaryAddress = parser.buffer(constants.sizes.addressDecoded);
 		blockHeader.feeMultiplier = parser.uint32();
 		blockHeader.blockHeader_Reserved1 = parser.uint32();
 		return blockHeader;
@@ -53,11 +56,14 @@ const blockHeaderCodec = {
 		serializer.writeUint64(blockHeader.height);
 		serializer.writeUint64(blockHeader.timestamp);
 		serializer.writeUint64(blockHeader.difficulty);
+		serializer.writeBuffer(blockHeader.proofGamma);
+		serializer.writeBuffer(blockHeader.proofVerificationHash);
+		serializer.writeBuffer(blockHeader.proofScalar);
 		serializer.writeBuffer(blockHeader.previousBlockHash);
 		serializer.writeBuffer(blockHeader.transactionsHash);
 		serializer.writeBuffer(blockHeader.receiptsHash);
 		serializer.writeBuffer(blockHeader.stateHash);
-		serializer.writeBuffer(blockHeader.beneficiaryPublicKey);
+		serializer.writeBuffer(blockHeader.beneficiaryAddress);
 		serializer.writeUint32(blockHeader.feeMultiplier);
 		serializer.writeUint32(blockHeader.blockHeader_Reserved1);
 	}

@@ -72,9 +72,13 @@ describe('model schema builder', () => {
 				'blockHeader',
 				'blockHeaderMetadata',
 				'blockHeaderWithMetadata',
-				'blockHeaderWithMetadataAndId',
 				'merkleProofInfo',
 				'merkleProofInfoPathNode',
+				'finalizedBlock',
+				'finalizationProof',
+				'messageGroup',
+				'bmTreeSignature',
+				'parentPublicKeySignaturePair',
 
 				'transaction',
 				'transactionMetadata',
@@ -82,19 +86,23 @@ describe('model schema builder', () => {
 
 				'transactionStatus',
 
+				'accountWithMetadata',
 				'account',
+				'supplementalPublicKey',
 				'activityBucket',
 				'mosaic',
-				'accountMeta',
-				'accountWithMetadata',
+				'accountLinkPublicKey',
+				'accountLinkPublicKey.voting',
+				'votingPublicKey',
 
-				'chainStatistic',
-				'chainStatisticCurrent',
+				'chainInfo',
 				'nodeHealth',
+				'nodeHealthStatus',
 				'nodeInfo',
 				'communicationTimestamps',
 				'nodeTime',
 				'serverInfo',
+				'serverInfoData',
 				'stateTree',
 				'storageInfo'
 			]);
@@ -109,24 +117,28 @@ describe('model schema builder', () => {
 			expect(modelSchema).to.not.contain.any.keys(Object.keys(EntityType));
 		});
 
-		const extractPropertiesWithType = (object, matches, type, key = '') => {
-			const properties = Object.keys(object);
-			properties.forEach(property => {
-				if (ModelType[type] === (object[property].type || object[property]))
+		const extractPropertiesWithType = (object, matches, propertyType, key = '') => {
+			const getTypeIfNotBasicType = obj => {
+				const objKeys = Object.keys(obj);
+				return 2 === objKeys.length && objKeys.includes('type') && objKeys.includes('schemaName') ? obj.type : undefined;
+			};
+
+			Object.keys(object).forEach(property => {
+				if (ModelType[propertyType] === (getTypeIfNotBasicType(object[property]) || object[property]))
 					matches.push(`${key}${property}`);
 				else if ('string' !== typeof object[property])
-					extractPropertiesWithType(object[property], matches, type, `${key}${property}.`);
+					extractPropertiesWithType(object[property], matches, propertyType, `${key}${property}.`);
 			});
 		};
 
-		const extractSchemaPropertiesWithType = type => {
+		const extractSchemaPropertiesWithType = propertyType => {
 			// Arrange:
 			const builder = new ModelSchemaBuilder();
 			const modelSchema = builder.build();
 
 			// Act:
 			const matchingProperties = [];
-			extractPropertiesWithType(modelSchema, matchingProperties, type);
+			extractPropertiesWithType(modelSchema, matchingProperties, propertyType);
 			return matchingProperties;
 		};
 
@@ -148,18 +160,26 @@ describe('model schema builder', () => {
 			expect(matchingProperties).to.deep.equal([
 				'blockHeaderWithMetadata.meta',
 				'blockHeaderWithMetadata.block',
-				'blockHeaderWithMetadataAndId.meta',
-				'blockHeaderWithMetadataAndId.block',
+
+				'bmTreeSignature.root',
+				'bmTreeSignature.top',
+				'bmTreeSignature.bottom',
 
 				'transactionWithMetadata.meta',
 				'transactionWithMetadata.transaction',
 
-				'accountWithMetadata.meta',
 				'accountWithMetadata.account',
+				'account.supplementalPublicKeys',
+				'supplementalPublicKey.linked',
+				'supplementalPublicKey.node',
+				'supplementalPublicKey.vrf',
+				'supplementalPublicKey.voting',
 
-				'chainStatistic.current',
+				'chainInfo.latestFinalizedBlock',
 
-				'nodeTime.communicationTimestamps'
+				'nodeHealth.status',
+				'nodeTime.communicationTimestamps',
+				'serverInfo.serverInfo'
 			]);
 		});
 
@@ -171,8 +191,12 @@ describe('model schema builder', () => {
 			expect(matchingProperties).to.deep.equal([
 				'blockHeaderMetadata.stateHashSubCacheMerkleRoots',
 				'merkleProofInfo.merklePath',
+				'finalizationProof.messageGroups',
+				'messageGroup.hashes',
+				'messageGroup.signatures',
 				'account.activityBuckets',
 				'account.mosaics',
+				'accountLinkPublicKey.voting.publicKeys',
 				'stateTree.tree'
 			]);
 		});
@@ -190,17 +214,25 @@ describe('model schema builder', () => {
 				'verifiableEntity.signature',
 				'verifiableEntity.signerPublicKey',
 
+				'blockHeader.proofGamma',
+				'blockHeader.proofVerificationHash',
+				'blockHeader.proofScalar',
 				'blockHeader.previousBlockHash',
 				'blockHeader.transactionsHash',
 				'blockHeader.receiptsHash',
 				'blockHeader.stateHash',
-				'blockHeader.beneficiaryPublicKey',
+				'blockHeader.beneficiaryAddress',
 				'blockHeader.signature',
 				'blockHeader.signerPublicKey',
 				'blockHeaderMetadata.hash',
 				'blockHeaderMetadata.generationHash',
 				'blockHeaderMetadata.stateHashSubCacheMerkleRoots.schemaName',
 				'merkleProofInfoPathNode.hash',
+				'finalizedBlock.hash',
+				'finalizationProof.hash',
+				'messageGroup.hashes.schemaName',
+				'parentPublicKeySignaturePair.parentPublicKey',
+				'parentPublicKeySignaturePair.signature',
 
 				'transaction.signature',
 				'transaction.signerPublicKey',
@@ -209,14 +241,14 @@ describe('model schema builder', () => {
 				'transactionMetadata.merkleComponentHash',
 
 				'transactionStatus.hash',
-				'transactionStatus.address',
 
 				'account.address',
 				'account.publicKey',
-				'account.linkedAccountKey',
+				'accountLinkPublicKey.publicKey',
+				'votingPublicKey.publicKey',
 
 				'nodeInfo.publicKey',
-				'nodeInfo.networkGenerationHash',
+				'nodeInfo.networkGenerationHashSeed',
 				'stateTree.tree.schemaName'
 			]);
 		});
@@ -231,6 +263,9 @@ describe('model schema builder', () => {
 				'blockHeader.timestamp',
 				'blockHeader.difficulty',
 				'blockHeaderMetadata.totalFee',
+				'finalizedBlock.height',
+				'finalizationProof.height',
+				'messageGroup.height',
 
 				'transaction.deadline',
 				'transaction.maxFee',
@@ -248,9 +283,9 @@ describe('model schema builder', () => {
 				'activityBucket.rawScore',
 				'mosaic.amount',
 
-				'chainStatisticCurrent.height',
-				'chainStatisticCurrent.scoreLow',
-				'chainStatisticCurrent.scoreHigh',
+				'chainInfo.height',
+				'chainInfo.scoreLow',
+				'chainInfo.scoreHigh',
 
 				'communicationTimestamps.receiveTimestamp',
 				'communicationTimestamps.sendTimestamp'
@@ -273,9 +308,10 @@ describe('model schema builder', () => {
 
 			// Assert:
 			expect(matchingProperties).to.deep.equal([
-				'blockHeaderWithMetadataAndId.id',
+				'blockHeaderWithMetadata.id',
 				'transactionMetadata.aggregateId',
-				'transactionMetadata.id'
+				'transactionWithMetadata.id',
+				'accountWithMetadata.id'
 			]);
 		});
 
@@ -285,8 +321,14 @@ describe('model schema builder', () => {
 
 			// Assert:
 			expect(matchingProperties).to.deep.equal([
+				'merkleProofInfoPathNode.position',
+				'transactionStatus.group',
+				'nodeHealthStatus.apiNode',
+				'nodeHealthStatus.db',
 				'nodeInfo.friendlyName',
-				'nodeInfo.host'
+				'nodeInfo.host',
+				'serverInfoData.restVersion',
+				'serverInfoData.sdkVersion'
 			]);
 		});
 
@@ -297,6 +339,58 @@ describe('model schema builder', () => {
 			// Assert:
 			expect(matchingProperties).to.deep.equal([
 				'transactionStatus.code'
+			]);
+		});
+
+		it('exposes correct int properties', () => {
+			// Act:
+			const matchingProperties = extractSchemaPropertiesWithType('int');
+
+			// Assert:
+			expect(matchingProperties).to.deep.equal([
+				'blockHeader.size',
+				'blockHeader.version',
+				'blockHeader.network',
+				'blockHeader.type',
+				'blockHeader.feeMultiplier',
+				'blockHeaderMetadata.totalTransactionsCount',
+				'blockHeaderMetadata.transactionsCount',
+				'blockHeaderMetadata.statementsCount',
+
+				'transaction.size',
+				'transaction.version',
+				'transaction.network',
+				'transaction.type',
+				'transactionMetadata.index',
+
+				'account.accountType',
+				'activityBucket.beneficiaryCount',
+
+				'nodeInfo.version',
+				'nodeInfo.roles',
+				'nodeInfo.port',
+				'nodeInfo.networkIdentifier',
+
+				'storageInfo.numBlocks',
+				'storageInfo.numTransactions',
+				'storageInfo.numAccounts'
+			]);
+		});
+
+		it('exposes correct uint properties', () => {
+			// Act:
+			const matchingProperties = extractSchemaPropertiesWithType('uint');
+
+			// Assert:
+			expect(matchingProperties).to.deep.equal([
+				'finalizedBlock.finalizationEpoch',
+				'finalizedBlock.finalizationPoint',
+				'finalizationProof.version',
+				'finalizationProof.finalizationEpoch',
+				'finalizationProof.finalizationPoint',
+				'messageGroup.stage',
+				'votingPublicKey.startEpoch',
+				'votingPublicKey.endEpoch'
 			]);
 		});
 

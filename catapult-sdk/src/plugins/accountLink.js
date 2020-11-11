@@ -32,7 +32,25 @@ const constants = { sizes };
 const accountLinkPlugin = {
 	registerSchema: builder => {
 		builder.addTransactionSupport(EntityType.accountLink, {
-			remotePublicKey: ModelType.binary
+			linkedPublicKey: ModelType.binary,
+			linkAction: ModelType.int
+		});
+
+		builder.addTransactionSupport(EntityType.nodeKeyLink, {
+			linkedPublicKey: ModelType.binary,
+			linkAction: ModelType.int
+		});
+
+		builder.addTransactionSupport(EntityType.votingKeyLink, {
+			linkedPublicKey: ModelType.binary,
+			startEpoch: ModelType.uint,
+			endEpoch: ModelType.uint,
+			linkAction: ModelType.int
+		});
+
+		builder.addTransactionSupport(EntityType.vrfKeyLink, {
+			linkedPublicKey: ModelType.binary,
+			linkAction: ModelType.int
 		});
 	},
 
@@ -40,13 +58,59 @@ const accountLinkPlugin = {
 		codecBuilder.addTransactionSupport(EntityType.accountLink, {
 			deserialize: parser => {
 				const transaction = {};
-				transaction.remotePublicKey = parser.buffer(constants.sizes.signerPublicKey);
+				transaction.linkedPublicKey = parser.buffer(constants.sizes.signerPublicKey);
 				transaction.linkAction = parser.uint8();
 				return transaction;
 			},
 
 			serialize: (transaction, serializer) => {
-				serializer.writeBuffer(transaction.remotePublicKey);
+				serializer.writeBuffer(transaction.linkedPublicKey);
+				serializer.writeUint8(transaction.linkAction);
+			}
+		});
+
+		codecBuilder.addTransactionSupport(EntityType.nodeKeyLink, {
+			deserialize: parser => {
+				const transaction = {};
+				transaction.linkedPublicKey = parser.buffer(constants.sizes.signerPublicKey);
+				transaction.linkAction = parser.uint8();
+				return transaction;
+			},
+
+			serialize: (transaction, serializer) => {
+				serializer.writeBuffer(transaction.linkedPublicKey);
+				serializer.writeUint8(transaction.linkAction);
+			}
+		});
+
+		codecBuilder.addTransactionSupport(EntityType.votingKeyLink, {
+			deserialize: parser => {
+				const transaction = {};
+				transaction.linkedPublicKey = parser.buffer(constants.sizes.votingKey);
+				transaction.startEpoch = parser.uint32();
+				transaction.endEpoch = parser.uint32();
+				transaction.linkAction = parser.uint8();
+				return transaction;
+			},
+
+			serialize: (transaction, serializer) => {
+				serializer.writeBuffer(transaction.linkedPublicKey);
+				serializer.writeUint32(transaction.startEpoch);
+				serializer.writeUint32(transaction.endEpoch);
+				serializer.writeUint8(transaction.linkAction);
+			}
+		});
+
+		codecBuilder.addTransactionSupport(EntityType.vrfKeyLink, {
+			deserialize: parser => {
+				const transaction = {};
+				transaction.linkedPublicKey = parser.buffer(constants.sizes.signerPublicKey);
+				transaction.linkAction = parser.uint8();
+				return transaction;
+			},
+
+			serialize: (transaction, serializer) => {
+				serializer.writeBuffer(transaction.linkedPublicKey);
 				serializer.writeUint8(transaction.linkAction);
 			}
 		});

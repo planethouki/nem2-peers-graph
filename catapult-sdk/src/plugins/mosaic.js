@@ -30,20 +30,20 @@ const mosaicPlugin = {
 	registerSchema: builder => {
 		builder.addTransactionSupport(EntityType.mosaicDefinition, {
 			id: ModelType.uint64HexIdentifier,
-			duration: ModelType.uint64
+			duration: ModelType.uint64,
+			nonce: ModelType.int,
+			flags: ModelType.int,
+			divisibility: ModelType.int
 		});
 
 		builder.addTransactionSupport(EntityType.mosaicSupplyChange, {
 			mosaicId: ModelType.uint64HexIdentifier,
-			delta: ModelType.uint64
-		});
-
-		builder.addSchema('ownedMosaics', {
-			mosaics: { type: ModelType.array, schemaName: 'mosaicDescriptor.mosaic' }
+			delta: ModelType.uint64,
+			action: ModelType.int
 		});
 
 		builder.addSchema('mosaicDescriptor', {
-			meta: { type: ModelType.object, schemaName: 'transactionMetadata' },
+			id: ModelType.objectId,
 			mosaic: { type: ModelType.object, schemaName: 'mosaicDescriptor.mosaic' }
 		});
 
@@ -51,8 +51,10 @@ const mosaicPlugin = {
 			id: ModelType.uint64HexIdentifier,
 			supply: ModelType.uint64,
 			startHeight: ModelType.uint64,
-			ownerPublicKey: ModelType.binary,
 			ownerAddress: ModelType.binary,
+			revision: ModelType.int,
+			flags: ModelType.int,
+			divisibility: ModelType.int,
 			duration: ModelType.uint64
 		});
 	},
