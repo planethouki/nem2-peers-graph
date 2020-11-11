@@ -4,11 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "yarn fetch && yarn generate:vis && yarn generate:geo",
-    "fetch": "node fetchPeers.js",
-    "generate:vis": "node generateVisData.js",
-    "generate:geo": "node fetchGeoData.js",
-    "generate:rest": "node fetchRests.js"
+    "start": "node src/fetchPeers.js"
   },
   "dependencies": {
     "async": "^3.1.0",
