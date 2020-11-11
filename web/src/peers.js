@@ -37,7 +37,11 @@ env.getPeersData()
         });
 
         $("#all-node-num").text(tableData.length);
-        $("#dual-node-num").text(tableData.filter(x => x.roles === 3).length);
-        $("#peer-node-num").text(tableData.filter(x => x.roles === 1).length);
-        $("#api-node-num").text(tableData.filter(x => x.roles === 2).length);
+        $("#role-1-num").text(tableData.filter(x => x.roles === 1).length);
+        $("#role-2-num").text(tableData.filter(x => x.roles === 2).length);
+        $("#role-3-num").text(tableData.filter(x => x.roles === 3).length);
+        $("#role-4-num").text(tableData.filter(x => x.roles === 4).length);
+        $("#role-5-num").text(tableData.filter(x => x.roles === 5).length);
+        $("#role-6-num").text(tableData.filter(x => x.roles === 6).length);
+        $("#role-7-num").text(tableData.filter(x => x.roles === 7).length);
     });

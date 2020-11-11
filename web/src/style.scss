@@ -29,7 +29,7 @@
         transform: translate(-100%, -50%);
     }
 }
-#legend1, #legend2, #legend3 {
+#legend1, #legend2, #legend3, #legend4 {
     @extend .rounded, .m-1;
     display: inline-block;
     width: 8rem;
@@ -51,4 +51,10 @@
 #legend3 {
     border-color: #1c315d;
     background-color: #1c315d;
+}
+
+#legend4 {
+    color: black;
+    border-color: #ffb000;
+    background-color: #ff0;
 }

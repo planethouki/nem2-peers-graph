@@ -45,7 +45,11 @@ async.waterfall([
                     {url: 'http://ip-api.com/batch', body: requestData, json: true},
                     (error, response, body) => {
                         const successes = body.filter((geo) => {
-                            return geo.status === 'success'
+                            if (geo && geo.status) {
+                                return geo.status === 'success';
+                            } else {
+                                return false;
+                            }
                         });
                         geos.push(...successes);
                         callback(error);
@@ -62,7 +66,7 @@ async.waterfall([
                 request.post(
                     {url: `http://ip-api.com/json/${requestData}`, json: true},
                     (error, response, body) => {
-                        if (body.status === 'success') {
+                        if (body && body.status === 'success') {
                             geos.push(body)
                         }
                         callback(error);

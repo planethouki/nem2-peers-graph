@@ -1,8 +1,8 @@
-const nodes = require('../discover/output/nodes.json');
-const edges = require( '../discover/output/edges.json');
-const peers = require( '../discover/output/peers.json');
-const geos = require( '../discover/output/geos.json');
-const rests = require( '../discover/output/rests.json');
+const nodes = require('../dist-peers/vis-nodes.json');
+const edges = require( '../dist-peers/vis-edges.json');
+const peers = require( '../dist-peers/peers.json');
+const geos = require( '../dist-peers/geos.json');
+const rests = require( '../dist-peers/rests.json');
 
 module.exports = {
     getGraphData() {

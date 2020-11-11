@@ -19,8 +19,13 @@ function dataToText(data, prop) {
 }
 
 const rolesFormatPattern = {
+    1: 'Peer',
     2: 'Api',
-    3: 'Dual'
+    3: 'Peer, Api',
+    4: 'Voting',
+    5: 'Peer, Voting',
+    6: 'Api, Voting',
+    7: 'Peer, Api, Voting'
 }
 
 env.getRestData()
