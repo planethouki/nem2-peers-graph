@@ -76,7 +76,7 @@ async.waterfall([
         recursion(node, 0, callback);
     },
     (callback) => {
-        fs.writeFile('./output/peers.json', JSON.stringify(peersInfo, null, '  '), callback);
+        fs.writeFile('../dist-peers/peers.json', JSON.stringify(peersInfo, null, '  '), callback);
     },
 ]);
 
