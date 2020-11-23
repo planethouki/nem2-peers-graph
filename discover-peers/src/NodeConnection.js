@@ -3,16 +3,12 @@ const tls = require('tls');
 
 module.exports = class NodeConnection {
 
-    constructor(host, port, config) {
-        this.config = config;
+    constructor(host, port) {
         this.host = host;
         this.port = port;
 
         const contextOptions = {
             minVersion: 'TLSv1.3',
-            key: config.key,
-            cert: config.certificate,
-            ca: [config.caCertificate],
             sigalgs: 'ed25519'
         };
 

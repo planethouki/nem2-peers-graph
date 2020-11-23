@@ -6,14 +6,6 @@ const NodePeers = require('./NodePeers');
 const NodeInfo = require('./NodeInfo');
 const NodeConnection = require('./NodeConnection');
 
-const certDir = process.env.CERT_DIR;
-
-const config = {
-    certificate: fs.readFileSync(`${certDir}/node.crt.pem`),
-    key: fs.readFileSync(`${certDir}/node.key.pem`),
-    caCertificate: fs.readFileSync(`${certDir}/ca.cert.pem`)
-};
-
 const startNode = {
     port: Number(process.env.PORT),
     host: process.env.HOST
@@ -30,7 +22,7 @@ function recursion(node, depth, callback) {
     if (depth > maxDepth) {
         return callback();
     }
-    const connection = new NodeConnection(node.host, node.port, config);
+    const connection = new NodeConnection(node.host, node.port);
     connection
         .send(catapult.packet.PacketType.nodeDiscoveryPullPeers)
         .then((payload) => {
@@ -58,7 +50,7 @@ function recursion(node, depth, callback) {
 
 async.waterfall([
     (callback) => {
-        const connection = new NodeConnection(startNode.host, startNode.port, config);
+        const connection = new NodeConnection(startNode.host, startNode.port);
         connection
             .send(catapult.packet.PacketType.nodeDiscoveryPullPing)
             .then((payload) => {
