@@ -5,7 +5,7 @@ yarn install
 yarn run rebuild
 cd ..
 
-for module in 'discover' 'web'
+for module in 'add-peers-info' 'discover-peers' 'web'
 do
 	cd "${module}"
 	yarn install
