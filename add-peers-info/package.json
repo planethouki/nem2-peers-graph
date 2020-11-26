@@ -4,8 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "node src/fetchPeers.js",
-    "fetch": "node fetchPeers.js",
+    "start": "yarn generate:geo && yarn generate:rest && yarn generate:vis",
     "generate:vis": "node generateVisData.js",
     "generate:geo": "node fetchGeoData.js",
     "generate:rest": "node fetchRests.js"
