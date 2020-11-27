@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --progress --config=webpack.prod.js",
     "dev": "webpack-dev-server --progress --open --config=webpack.dev.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "bootstrap": "^4.4.1",
@@ -26,6 +27,7 @@
     "ejs": "^2.7.4",
     "ejs-html-loader": "^4.0.1",
     "file-loader": "^6.0.0",
+    "gh-pages": "^3.1.0",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.2.0",
     "json-loader": "^0.5.7",

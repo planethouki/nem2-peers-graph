@@ -2,6 +2,10 @@
 
 ![image](https://user-images.githubusercontent.com/26595148/74582542-cabfa200-5000-11ea-956b-5d70cb567b41.png)
 
+## demo
+
+https://planethouki.github.io/nem2-peers-graph/
+
 ## version
 
 Symbol Testnet 0.10.0.3
