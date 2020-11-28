@@ -13,3 +13,20 @@ Symbol Testnet 0.10.0.3
 ## catapult-sdk
 
 https://github.com/nemtech/catapult-rest/tree/v2.1.0/catapult-sdk
+
+
+## how to run
+
+```
+git clone https://github.com/planethouki/nem2-peers-graph
+cd nem2-peers-graph
+./yarn_setup.sh
+cd discover-peers
+yarn start
+cd ..
+cd add-peers-info
+yarn start
+cd ..
+cd web
+yarn dev
+```
