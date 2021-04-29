@@ -1,12 +1,27 @@
-@import "~bootswatch/dist/lumen/variables";
+$primary: #c8a05c;
+$secondary: #999999;
+$success: #71ab54;
+$info: #2e3a3e;
+$warning: #ef9a1c;
+$danger: #f44336;
+$light: #F3E9DC;
+$dark: #5E3023;
+
+//@import "~bootswatch/dist/lumen/variables";
 @import '~bootstrap/scss/bootstrap';
-@import "~bootswatch/dist/lumen/bootswatch";
+//@import "~bootswatch/dist/lumen/bootswatch";
 @import '~tabulator-tables/src/scss/tabulator_simple.scss';
 
-#mynetwork {
+#mynetwork-wrap {
     width: 100%;
     height: calc(100vh - 56px);
     min-height: 300px;
+    overflow: hidden;
+}
+#mynetwork {
+    width: calc(100vw * 2);
+    height: calc((100vh - 56px) * 2);
+    transform: translate(calc(-0.5 * 100vw), calc(-0.5 * (100vh - 56px)));
 }
 #mynetwork * {
     border: none;

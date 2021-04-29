@@ -7,6 +7,7 @@
     "ga": "node writeGA.js",
     "build": "webpack --progress --config=webpack.prod.js",
     "dev": "webpack-dev-server --progress --open --config=webpack.dev.js",
+    "dev-build": "webpack --progress --config=webpack.dev.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "yarn build && gh-pages -d dist"
   },
