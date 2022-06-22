@@ -10,7 +10,7 @@
     "generate:rest": "node fetchRests.js"
   },
   "dependencies": {
-    "async": "^3.1.0",
+    "async": "^3.2.2",
     "catapult-sdk": "link:../catapult-sdk",
     "dotenv": "^8.2.0",
     "request": "^2.88.0"
